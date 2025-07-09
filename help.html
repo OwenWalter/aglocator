@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="ASSIGNMENT GROUP LOCATOR">
+	<meta name="author" content="Andy Foreman">
+
+	<title>Assignment Group Locator</title>
+	<link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+
+	<!-- Bootstrap core CSS -->
+	<link href="assets/css/bootstrap.css" rel="stylesheet">
+	<!--external css-->
+	<link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+	<!-- Custom styles for this page-->
+	<link href="assets/css/style.css" rel="stylesheet">
+	<link href="assets/css/style-responsive.css" rel="stylesheet">
+	<link href="assets/css/table-responsive.css" rel="stylesheet">
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+
+<body onLoad="document.forms.search.part.focus()">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand">AG Locator</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li><a href="index.html">Search</a></li>
+        <li><a href="updatecontent.html">Add New Entry</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li class="active"><a href="help.html">Help<span class="sr-only">(current)</span></a></li>
+         <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other Projects <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://toothless.unx.sas.com/sslazy/" target="_blank">SS LAZY Signature Database</a></li>
+            <li><a href="http://toothless.unx.sas.com/goats/" target="_blank">GOATS Task Snippets Reference</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="http://toothless.unx.sas.com/fts-clock.html" target="_blank">Follow the Sun Clock</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>		
+
+		<section id="container" >
+
+			<!--main content start-->
+			<section id="main-content" style="margin-left: 0px;">
+				<section class="wrapper">
+
+					<div class="row">
+						<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+						<h3 style="font-weight:bold;">Searching Entries</h3>
+						<h4>How to Search the AG Locator Database</h4>
+						<p>To search for a product or keyword, use the <a href="index.html">Search</a> page. When searching for entries, the database is searched based on the entry keyword field, assignment group name field, and notes field.</p>
+						<br>
+						<h4>Search Tips</h4>
+						<p>The AG Locator search is very literal. If you are searching for SAS Enterprise Guide, but the signature was submitted using a shorthand abbreviation such as "SAS EG", it may not appear in the search results.</p>
+						<p>Try various searches using different terms, abbreviations, or broader queries if you are unable to locate results you expect.</p>
+						<p>Remember also that the AG Locator database only includes the content provided by users. If you are unable to find an entry on a product or area you think would be useful, please make one and then submit it to the database for others to use!</p>
+						</div>
+
+						<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+						<h3 style="font-weight:bold;">Adding Entries</h3>
+						<h4>How to Add a New Entry to the AG Locator Database</h4>
+						<p>To add a new entry, use the <a href="updatecontent.html">Add New Entry</a> page. When adding a new entry, be sure to give it a good keyword/name that properly describes the relevant area. If you need to provide more information, the notes field can be used.</p>
+						<br>
+						<h4>Supported Formatting and Input</h4>
+						<p>The AG Locator database will preserve text spacing. It can preserve additional formatting if specified as valid HTML code.</p>
+						</div>
+
+						<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+						<h3 style="font-weight:bold;">Modifying entries</h3>
+						<h4>How to Update an Entry</h4>
+						<p>To update an entry, search for the entry in the database, then click its name to open the View Entry Details page for that entry. On the bottom-left of this page, find and click the link named "Modify Entry" to bring up the modification screen.</p>
+						<p> Make the desired edits to the signature text and then click the "Save Modified Entry" button at the bottom-left of the modification screen to update the signature in the database.</p>
+						<p> Note that this action will prompt you for your author key, a unique value based on the email address provided when the entry was originally submitted. Only the author key matching the email address provided with the original signature submission will be accepted, meaning that only the original entry author can update it.</p>
+						<p>If you do not know your author key, follow the prompts on the Modify Entry screen or <a href="requestkey.html" target="_blank">click here</a>  to request your author key be emailed to you.</p><br>
+						<p>If the original author of an entry has retired, changed positions, does not have access to the saved email address, or otherwise is  no longer available to modify it, please contact  <a href="mailto:andy.foreman@sas.com" target="_blank">Andy Foreman</a> for assistance.</p>
+						<p>To perform bulk updates on entries or bulk author updates, please contact <a href="mailto:andy.foreman@sas.com" target="_blank">Andy Foreman</a>.</p>
+						<br>
+						<h4>How to Remove an Entry</h4>
+						<p>To remove an entry from the database, follow the same steps as seen in "How to Update an Entry" above, but instead click the "Delete Entry from Database" button at the bottom-right of the Modify Entry screen.</p>
+						<p> If you feel that an entry should be removed but you are not the original author of that entry, please contact <a href="mailto:andy.foreman@sas.com" target="_blank">Andy Foreman</a> or the ARTS WebDev team.</p>
+						<p>The ARTS WebDev team reserves the right to remove entries at their discretion, as well as at the request of management. If possible, we will attempt to contact and allow authors to modify problematic entries before outright deleting them.</p>
+						<br>
+						<h4>Entry Removal Policies</h4>
+						<p>The development team reserves the right to edit or remove an entry from the database at any time, for any reason.</p>
+						<p>Entries containing inappropriate content, depreciated or inaccurate information, or other issues which have been deemed unacceptable may be modified or deleted without notification to the original submitter.</p>
+						<p>If you notice an entry that you feel should be removed due to its content, please report it by contacting the development team (provide a link to the problematic entry and explain why it should be removed).</p>
+						</div>
+
+						<div class="col-xs-12 col-sm-4 col-md-3 col-lg-3">
+						<h3 style="font-weight:bold;">Additional Help</h3>
+						<h4>What is AG Locator?</h4>
+						<p>AG Locator is a database for SAS Technical Support and other SAS employees where associations between products, components, etc. and the relevant Assignment Groups (in ServiceNow CSM) be stored and accessed. We envisioned AG Locator as a way of enabling self-service management of these associations for Technical Support engineers and groups.</p>
+						<p>The name "cheatsheet" in the URL is a reference to a similar tool which was formerly part of SAS Technical Support's deprecated custom ticketing application, Sirius.</p>
+						<br>
+                                                <h4>Contact the Team</h4>
+                                                <p>If you have questions about using this site, encounter errors / bugs / glitches, or need further assistance, please contact <a href="mailto:andy.foreman@sas.com">Andy Foreman</a> or the current ARTS WebDev team:</p>
+                                                <ul>
+                                                <li style="list-style:square;">Andy Foreman</li>
+                                                </ul>
+						</div>
+
+					</div>
+					</div><!-- /row -->
+				</section>
+				<! --/wrapper -->
+			</section><!-- /MAIN CONTENT -->
+
+			<!--main content end-->
+
+		</section>
+
+		<!-- place JS scripts at end of page for faster load times -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+
+		<!--script for this page-->
+		<script type="text/javascript" src="scripts/triggers.js"></script>
+
+	</body>
+</html>

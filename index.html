@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="Assignment Group Locator">
+	<meta name="author" content="Andy Foreman">
+
+	<title>Assignment Group Locator</title>
+	<link rel="icon" href="assets/favicon.ico" type="image/x-icon" />
+
+	<!-- Bootstrap core CSS -->
+	<link href="assets/css/bootstrap.css" rel="stylesheet">
+	<!--external css-->
+	<link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
+
+	<!-- Custom styles for this page-->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+	<link href="assets/css/style.css" rel="stylesheet">
+	<link href="assets/css/style-responsive.css" rel="stylesheet">
+	<link href="assets/css/table-responsive.css" rel="stylesheet">
+	<link href="assets/css/custom.css" rel="stylesheet">
+	
+	<!-- Filter pill styles -->
+	<style>
+		/* SAS Blue Color Palette */
+		:root {
+			--sas-blue: #0074D9;
+			--sas-blue-dark: #005bb5;
+			--sas-blue-light: #4da3e0;
+			--sas-gray-light: #f8f9fa;
+			--sas-gray: #6c757d;
+			--sas-border: #e9ecef;
+		}
+
+		/* Overall page styling */
+		body {
+			font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			background-color: var(--sas-gray-light);
+			color: #333;
+		}
+
+		/* Enhanced modern header styling */
+		.navbar-default {
+			background: linear-gradient(135deg, var(--sas-blue) 0%, var(--sas-blue-dark) 100%);
+			border: none;
+			box-shadow: 0 4px 20px rgba(0,116,217,0.2);
+			margin-bottom: 0;
+			padding: 8px 0;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.navbar-default::before {
+			content: '';
+			position: absolute;
+			top: -50%;
+			right: -10%;
+			width: 100px;
+			height: 200%;
+			background: rgba(255,255,255,0.05);
+			transform: rotate(15deg);
+		}
+
+		.navbar-default::after {
+			content: '';
+			position: absolute;
+			top: -50%;
+			right: -5%;
+			width: 60px;
+			height: 200%;
+			background: rgba(255,255,255,0.03);
+			transform: rotate(15deg);
+		}
+
+		.navbar-brand {
+			padding: 10px 20px;
+			transition: all 0.3s ease;
+			position: relative;
+			z-index: 10;
+		}
+
+		.navbar-brand img {
+			height: 60px;
+			width: auto;
+			max-width: 400px;
+			transition: all 0.3s ease;
+			transform: translateY(-15px);
+		}
+
+
+
+		.navbar-nav > li > a {
+			color: rgba(255,255,255,0.9) !important;
+			font-weight: 500;
+			font-size: 16px;
+			padding: 15px 20px !important;
+			transition: all 0.3s ease;
+			position: relative;
+			z-index: 10;
+		}
+
+		.navbar-nav > li > a:hover,
+		.navbar-nav > li > a:focus {
+			color: white !important;
+			background: rgba(255,255,255,0.15) !important;
+			border-radius: 6px;
+		}
+
+		.navbar-nav > .active > a {
+			background: rgba(255,255,255,0.2) !important;
+			border-radius: 6px;
+		}
+
+		/* Dropdown styling in navbar */
+		.navbar-nav .dropdown-menu {
+			background: rgba(255,255,255,0.95);
+			backdrop-filter: blur(10px);
+			border: none;
+			box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+		}
+
+		/* Main content area */
+		#container {
+			background: white;
+			min-height: 100vh;
+		}
+
+		#main-content {
+			padding: 20px 20px 40px 20px;
+		}
+
+		/* Search section styling with reduced spacing */
+		.search-section {
+			background: transparent;
+			padding: 25px 35px 15px 35px;
+			margin-bottom: 15px;
+		}
+
+		.search-title {
+			font-size: 16px;
+			font-weight: 600;
+			color: #333;
+			margin-bottom: 20px;
+		}
+
+		/* Enhanced search input styling with bigger font */
+		.search-input-group {
+			position: relative;
+		}
+
+		.form-control {
+			height: 56px;
+			border: 2px solid var(--sas-border);
+			border-radius: 28px;
+			padding: 0 70px 0 24px;
+			font-size: 18px;
+			font-weight: 400;
+			transition: all 0.3s ease;
+			box-shadow: none;
+		}
+
+		.form-control:focus {
+			border-color: var(--sas-blue);
+			box-shadow: 0 0 0 4px rgba(0,116,217,0.1);
+			outline: none;
+		}
+
+		.input-group-btn {
+			position: absolute;
+			right: 6px;
+			top: 50%;
+			transform: translateY(-50%);
+			z-index: 10;
+		}
+
+		.btn-filter {
+			background: white;
+			border: 2px solid var(--sas-blue);
+			border-radius: 12px;
+			color: var(--sas-blue);
+			margin-left: 0;
+			padding: 12px 20px;
+			font-weight: 600;
+			font-size: 15px;
+			transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+			box-shadow: 0 2px 8px rgba(0,116,217,0.15);
+		}
+
+		.btn-filter:hover,
+		.btn-filter:focus {
+			background: var(--sas-blue);
+			color: white;
+			transform: translateY(-1px);
+			box-shadow: 0 4px 12px rgba(0,116,217,0.25);
+			border-color: var(--sas-blue);
+		}
+
+		.btn-filter:active {
+			transform: translateY(0);
+			box-shadow: 0 2px 6px rgba(0,116,217,0.2);
+		}
+
+		/* Compact inline filter pill styling */
+		.filter-pill-container {
+			text-align: right;
+			margin-top: 8px;
+			min-height: 20px;
+		}
+
+		#filterPill {
+			display: inline-block;
+			background: var(--sas-blue);
+			border-radius: 16px;
+			padding: 6px 12px;
+			font-size: 12px;
+			font-weight: 500;
+			color: white;
+			transition: all 0.3s ease;
+		}
+
+		#filterPill:hover {
+			background: var(--sas-blue-dark);
+			transform: translateY(-1px);
+		}
+
+		#filterPill .close {
+			float: none;
+			font-size: 14px;
+			font-weight: bold;
+			line-height: 1;
+			color: white;
+			text-shadow: none;
+			opacity: 0.8;
+			border: none;
+			background: none;
+			padding: 0;
+			cursor: pointer;
+			margin-left: 8px;
+		}
+
+		#filterPill .close:hover {
+			opacity: 1;
+			transform: scale(1.1);
+		}
+
+		/* Enhanced table styling with bigger fonts and full width */
+		.content-panel {
+			background: white;
+			border-radius: 16px;
+			box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+			border: none;
+			overflow: hidden;
+		}
+
+		.table {
+			margin-bottom: 0;
+			font-size: 16px;
+			font-weight: 400;
+		}
+
+		.table > thead > tr > th {
+			background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+			border-bottom: 2px solid var(--sas-border);
+			font-weight: 700;
+			color: #333;
+			padding: 24px 20px;
+			font-size: 14px;
+			text-transform: uppercase;
+			letter-spacing: 0.8px;
+		}
+
+		.table > tbody > tr > td {
+			padding: 20px;
+			border-top: 1px solid var(--sas-border);
+			vertical-align: middle;
+			font-size: 16px;
+			line-height: 1.5;
+		}
+
+		.table > tbody > tr:hover {
+			background-color: rgba(0,116,217,0.02);
+		}
+
+		.table > tbody > tr > td a {
+			color: var(--sas-blue);
+			text-decoration: none;
+			font-weight: 600;
+			transition: color 0.3s ease;
+		}
+
+		.table > tbody > tr > td a:hover {
+			color: var(--sas-blue-dark);
+			text-decoration: underline;
+		}
+
+		/* Dropdown styling */
+		.dropdown-menu {
+			border: none;
+			box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+			border-radius: 12px;
+			padding: 12px 0;
+		}
+
+		.dropdown-menu > li > a {
+			padding: 12px 24px;
+			transition: all 0.3s ease;
+			font-size: 15px;
+		}
+
+		.dropdown-menu > li > a:hover {
+			background-color: var(--sas-blue);
+			color: white;
+		}
+
+		.dropdown-header {
+			font-weight: 700;
+			color: var(--sas-gray);
+			font-size: 12px;
+			text-transform: uppercase;
+			letter-spacing: 0.8px;
+			padding: 8px 24px;
+		}
+
+		/* Responsive improvements with full width tables */
+		@media (max-width: 768px) {
+			.search-section {
+				padding: 20px 25px 15px 25px;
+				margin: 15px;
+			}
+			
+			.filter-pill-container {
+				text-align: left;
+				margin-top: 10px;
+			}
+			
+			.form-control {
+				height: 50px;
+				font-size: 16px;
+			}
+			
+			.table-responsive {
+				border: none;
+			}
+
+			.navbar-brand img {
+				height: 50px;
+				max-width: 320px;
+			}
+
+			.search-title {
+				font-size: 15px;
+			}
+
+			#main-content {
+				padding: 15px 15px 30px 15px;
+			}
+		}
+
+		/* Animation for results appearing */
+		.tablesearch {
+			animation: fadeIn 0.4s ease-in;
+		}
+
+		@keyframes fadeIn {
+			from { opacity: 0; transform: translateY(15px); }
+			to { opacity: 1; transform: translateY(0); }
+		}
+
+		/* Hide legacy filter status */
+		#filterStatus {
+			display: none !important;
+		}
+	</style>
+
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+	<![endif]-->
+
+</head>
+
+<body onLoad="document.forms.search.name.focus()">
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">
+        <img src="assets/orangeLOGO.png" alt="Assignment Group Locator" />
+      </a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="index.html">Search<span class="sr-only">(current)</span></a></li>
+        <li><a href="updatecontent.html">Add New Entry</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="help.html">Help</a></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other Projects <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="http://toothless.unx.sas.com/sslazy/" target="_blank">SS LAZY Signature Database</a></li>            
+            <li><a href="http://toothless.unx.sas.com/goats/" target="_blank">GOATS Task Snippets Reference</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a href="http://toothless.unx.sas.com/fts-clock.html" target="_blank">Follow the Sun Clock</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+
+
+		<section id="container" >
+
+			<!--main content start-->
+			<section id="main-content" style="margin-left: 0px;">
+				<section class="wrapper">
+
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-8 col-lg-6 col-md-offset-2 col-lg-offset-3">
+							<div class="search-section">
+								<h1 class="search-title">Type a product, keyword, or assignment group name to search:</h1>
+								<form class="form-horizontal" name="search" role="form" method="POST" onkeypress="return event.keyCode != 13;">
+									<div class="search-input-group">
+										<input id="name" name="name" type="text" class="form-control" placeholder="Search here..." autocomplete="off"/>
+										<div class="input-group-btn">
+											<button type="button" class="btn btn-filter dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterBtn" title="Filter results">
+												<span class="glyphicon glyphicon-filter"></span> Filter <span class="caret"></span>
+											</button>
+											<ul class="dropdown-menu dropdown-menu-right" id="categoryFilter">
+												<li class="dropdown-header">Support Category</li>
+												<li><a href="#" data-category="">All Categories</a></li>
+												<li role="separator" class="divider"></li>
+												<li><a href="#" data-category="Installation">Installation</a></li>
+												<li><a href="#" data-category="Configuration">Configuration</a></li>
+												<li><a href="#" data-category="Performance">Performance</a></li>
+												<li><a href="#" data-category="Documentation">Documentation</a></li>
+												<li><a href="#" data-category="Security">Security</a></li>
+											</ul>
+										</div>
+									</div>
+									
+									<!-- Filter Pills Display - positioned inline -->
+									<div class="filter-pill-container">
+										<span id="filterPill" class="label label-info" style="display: none;">
+											<span class="glyphicon glyphicon-filter" style="font-size: 10px; margin-right: 4px;"></span>
+											<span class="filter-text"></span>
+											<button type="button" class="close" aria-label="Remove filter">
+												<span aria-hidden="true">&times;</span>
+											</button>
+										</span>
+									</div>
+								</form>
+								
+								<!-- Legacy filter status for debugging -->
+								<div id="filterStatus" style="margin-top: 5px; font-size: 12px; color: #666; display: none;">
+									<span class="glyphicon glyphicon-filter"></span> Filtered by: <span id="currentFilter">All Categories</span>
+									<a href="#" id="clearFilter" style="margin-left: 10px; font-size: 11px;">Clear Filter</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="row mt">
+						<div class="col-xs-12 col-sm-12 col-md-11 col-lg-10 col-md-offset-0 col-lg-offset-1">
+							<div class="content-panel tablesearch">
+								<section id="unseen">
+									<table id="resultTable" class="table table-bordered table-hover table-condensed">
+										<thead>
+											<tr>
+												<th class="small">Keyword / Product</th>
+												<th class="small">Support Category</th>
+												<th class="small">Assignment Group</th>
+												<th class="small">Notes</th>
+											</tr>
+										</thead>
+										<tbody></tbody>
+									</table>
+								</section>
+							</div><!-- /content-panel -->
+						</div><!-- /col -->
+					</div><!-- /row -->
+				</section>
+				<! --/wrapper -->
+			</section><!-- /MAIN CONTENT -->
+
+			<!--main content end-->
+
+		</section>
+
+		<!-- place JS scripts at end of page for faster load times -->
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+		<script src="assets/js/bootstrap.min.js"></script>
+		<script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+
+		<!--script for this page-->
+		<!-- <script type="text/javascript" src="scripts/triggers.js"></script> -->
+		<script type="text/javascript" src="scripts/votesystem.js"></script>
+		
+		<!-- Test script to debug JavaScript loading -->
+		<script type="text/javascript">
+			console.log('Inline script loaded - JavaScript is working');
+			
+			// Global variable to track current filter
+			var currentCategoryFilter = '';
+			
+			$(document).ready(function() {
+				console.log('jQuery is working');
+				console.log('Filter button exists:', $('#filterBtn').length);
+				console.log('Category filter dropdown exists:', $('#categoryFilter').length);
+				
+				// Hide search results initially
+				$(".tablesearch").hide();
+				
+				// Search function with filter support
+				function search() {
+					var query_value = $('input#name').val();
+					console.log('Search called with query:', query_value, 'filter:', currentCategoryFilter);
+					if(query_value !== ''){
+						$.ajax({
+							type: "POST",
+							url: "php/search.php",
+							data: { 
+								query: query_value,
+								category_filter: currentCategoryFilter
+							},
+							cache: false,
+							success: function(html){
+								console.log('Search successful, updating results');
+								$("table#resultTable tbody").html(html);
+							},
+							error: function(xhr, status, error) {
+								console.log('Search error:', error);
+							}
+						});
+					}
+					return false;    
+				}
+				
+				// Handle search input
+				$("input#name").live("keyup", function(e) {
+					// Set Timeout
+					clearTimeout($.data(this, 'timer'));
+					
+					// Set Search String
+					var search_string = $(this).val();
+					
+					// Do Search
+					if (search_string == '') {
+						$(".tablesearch").fadeOut(300);
+					}else{
+						$(".tablesearch").fadeIn(300);
+						$(this).data('timer', setTimeout(search, 100));
+					};
+				});
+				
+				// Simple click test for filter button
+				$('#filterBtn').click(function() {
+					console.log('Filter button clicked');
+				});
+				
+				// Handle dropdown item clicks
+				$(document).on('click', '#categoryFilter a', function(e) {
+					e.preventDefault();
+					console.log('Dropdown item clicked:', $(this).text());
+					
+					var category = $(this).data('category') || '';
+					console.log('Category data:', category);
+					
+					// Update current filter
+					currentCategoryFilter = category;
+					
+					// Show/hide the filter pill
+					if (category) {
+						$('#filterPill .filter-text').text(category);
+						$('#filterPill').show();
+					} else {
+						$('#filterPill').hide();
+					}
+					
+					// Trigger search if there's a current query
+					var current_query = $('input#name').val();
+					if (current_query !== '') {
+						console.log('Triggering search with filter');
+						search();
+					}
+					
+					console.log('Filter set to:', currentCategoryFilter);
+				});
+				
+				// Handle pill close button
+				$(document).on('click', '#filterPill .close', function(e) {
+					e.preventDefault();
+					console.log('Filter pill close clicked');
+					
+					// Clear the filter
+					currentCategoryFilter = '';
+					$('#filterPill').hide();
+					
+					// Trigger search if there's a current query
+					var current_query = $('input#name').val();
+					if (current_query !== '') {
+						console.log('Re-running search without filter');
+						search();
+					}
+				});
+			});
+		</script>
+
+	</body>
+</html>

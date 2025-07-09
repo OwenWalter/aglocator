@@ -1,0 +1,206 @@
+/* Import fonts */
+@import url(http://fonts.googleapis.com/css?family=Ruda:400,700,900);
+
+/* BASIC CONFIGURATION - body color 797979 */
+body {
+    color: #000;
+	background: #f2f2f2;
+    font-family: 'Ruda', sans-serif;
+    padding: 0px !important;
+    margin: 0px !important;
+    font-size:13px;
+}
+
+ul li {
+    list-style: none;
+}
+
+a, a:hover, a:focus {
+    text-decoration: none;
+    outline: none;
+}
+::selection {
+
+    background: #FF8533;
+    color: #fff;
+}
+::-moz-selection {
+    background: #FF8533;
+    color: #fff;
+}
+
+#container {
+    width: 100%;
+    height: 100%;
+}
+
+
+hr {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 0;
+  border-top: 1px solid #797979;
+}
+
+pre {
+    overflow: auto;
+    max-height: 500px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    word-wrap: break-word;
+}
+
+/*Helpers*/
+
+.centered {
+	text-align: center;
+}
+
+.goleft {
+	text-align: left;
+}
+
+.goleftfloat {
+	float: left;
+}
+
+.goright {
+	text-align: right;
+}
+
+.gorightfloat {
+	float: right;
+}
+
+.mt {
+	margin-top: 25px;
+}
+
+.mb {
+	margin-bottom: 25px;
+}
+
+.ml {
+	margin-left: 5px;
+	}
+
+.no-padding {
+	padding: 0 !important;
+}
+
+.no-margin {
+	margin: 0 !important;
+}
+
+
+
+/* MAIN CONTENT CONFIGURATION */
+#main-content {
+    margin-left: 210px;
+}
+
+.header, .footer {
+    min-height: 60px;
+    padding: 0 15px;
+}
+
+.header {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 1002;
+}
+
+.black-bg {
+    background: #DEDEDE;
+    border-bottom: 1px solid #cccccc;
+}
+
+.wrapper {
+    display: inline-block;
+    /*margin-top: 60px;*/
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-bottom: 15px;
+    padding-top: 0px;
+    width: 100%;
+}
+
+
+
+
+
+/*Content Panel*/
+.content-panel {
+	background: #ffffff;
+	box-shadow: 0px 3px 2px #aab2bd;
+	/*padding-top: 15px;
+	padding-bottom: 5px;*/
+}
+.content-panel h4 {
+	margin-left: 10px;
+}
+
+/*Navbar Bootstrap Overrides*/
+.navbar {
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+}
+
+.navbar-default {
+    background-color:#04304b;
+    border-color:#04304b;
+}
+
+.navbar-default .navbar-brand {
+    color: #ff8533 !important;
+}
+
+.navbar-default a {
+    color:#fff !important;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover, 
+.navbar-default .navbar-nav > .active > a:focus,
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .open > a:focus {
+    background-color:#ff8533; !important;
+}
+
+.navbar-default .navbar-nav > li > a:hover {
+   color:#ff8533 !important;
+}
+
+/*Override above hover color for the dropdown toggle menu element on hover*/
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-nav > .active > a:hover  {
+   color:#fff !important;   
+}
+
+
+.navbar-default .dropdown-menu {
+    background-color:#04304b;
+}
+
+.navbar-default .dropdown-menu > li >  a:hover,
+.navbar-default .dropdown-menu > li >  a:focus  {
+    background-color:#ff8533 !important;
+}
+
+/*Form Element Overrides*/
+.form-control {
+    color:#000 !important;
+}
+
+.form-control:focus {
+    border-color:#ff8533;
+}
+
+input:focus, input:hover, textarea:focus, textarea:hover {
+    border:2px solid;
+    border-color:#ff8533;
+    outline:none;
+}
