@@ -15,9 +15,186 @@
 	<link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
 
 	<!-- Custom styles for this page-->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 	<link href="assets/css/style.css" rel="stylesheet">
 	<link href="assets/css/style-responsive.css" rel="stylesheet">
 	<link href="assets/css/table-responsive.css" rel="stylesheet">
+	<link href="assets/css/custom.css" rel="stylesheet">
+	
+	<!-- Modern styling to match index.html -->
+	<style>
+		/* SAS Blue Color Palette */
+		:root {
+			--sas-blue: #0074D9;
+			--sas-blue-dark: #005bb5;
+			--sas-blue-light: #4da3e0;
+			--sas-gray-light: #f8f9fa;
+			--sas-gray: #6c757d;
+			--sas-border: #e9ecef;
+		}
+
+		/* Overall page styling */
+		body {
+			font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			background-color: var(--sas-gray-light);
+			color: #333;
+		}
+
+		/* Enhanced modern header styling */
+		.navbar-default {
+			background: linear-gradient(135deg, var(--sas-blue) 0%, var(--sas-blue-dark) 100%);
+			border: none;
+			box-shadow: 0 4px 20px rgba(0,116,217,0.2);
+			margin-bottom: 0;
+			padding: 8px 0;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.navbar-default::before {
+			content: '';
+			position: absolute;
+			top: -50%;
+			right: -10%;
+			width: 100px;
+			height: 200%;
+			background: rgba(255,255,255,0.05);
+			transform: rotate(15deg);
+		}
+
+		.navbar-default::after {
+			content: '';
+			position: absolute;
+			top: -50%;
+			right: -5%;
+			width: 60px;
+			height: 200%;
+			background: rgba(255,255,255,0.03);
+			transform: rotate(15deg);
+		}
+
+		.navbar-brand {
+			padding: 10px 20px;
+			transition: all 0.3s ease;
+			position: relative;
+			z-index: 10;
+		}
+
+		.navbar-brand img {
+			height: 60px;
+			width: auto;
+			max-width: 400px;
+			transition: all 0.3s ease;
+			transform: translateY(-15px);
+		}
+
+		.navbar-nav > li > a {
+			color: rgba(255,255,255,0.9) !important;
+			font-weight: 500;
+			font-size: 16px;
+			padding: 15px 20px !important;
+			transition: all 0.3s ease;
+			position: relative;
+			z-index: 10;
+		}
+
+		.navbar-nav > li > a:hover,
+		.navbar-nav > li > a:focus {
+			color: white !important;
+			background: rgba(255,255,255,0.15) !important;
+			border-radius: 6px;
+		}
+
+		.navbar-nav > .active > a {
+			background: rgba(255,255,255,0.2) !important;
+			border-radius: 6px;
+		}
+
+		/* Main content area */
+		#container {
+			background: white;
+			min-height: 100vh;
+		}
+
+		#main-content {
+			padding: 40px 20px;
+		}
+
+		/* Content panel styling */
+		.content-panel {
+			background: white !important;
+			padding: 30px;
+			border-radius: 12px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+			border: 1px solid var(--sas-border);
+		}
+
+		/* Form styling */
+		.content-panel h3, .content-panel h4, .content-panel h5 {
+			color: var(--sas-blue-dark);
+			margin-bottom: 15px;
+		}
+
+		.content-panel span {
+			color: #555;
+		}
+
+		.content-panel input[type="text"], .content-panel textarea, .content-panel select {
+			border: 2px solid var(--sas-border);
+			border-radius: 6px;
+			padding: 8px 12px;
+			font-size: 14px;
+			transition: all 0.3s ease;
+		}
+
+		.content-panel input[type="text"]:focus, .content-panel textarea:focus, .content-panel select:focus {
+			border-color: var(--sas-blue);
+			box-shadow: 0 0 0 3px rgba(0,116,217,0.1);
+			outline: none;
+		}
+
+		.content-panel input[type="submit"] {
+			background: var(--sas-blue) !important;
+			color: white !important;
+			border: none;
+			padding: 12px 24px;
+			border-radius: 8px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 12px rgba(0,116,217,0.2);
+		}
+
+		.content-panel input[type="submit"]:hover {
+			background: var(--sas-blue-dark) !important;
+			transform: translateY(-2px);
+			box-shadow: 0 6px 20px rgba(0,116,217,0.3);
+		}
+
+		.content-panel input[type="submit"]#delete-submit {
+			background: #dc3545 !important;
+		}
+
+		.content-panel input[type="submit"]#delete-submit:hover {
+			background: #c82333 !important;
+		}
+
+		/* Mobile responsive */
+		@media (max-width: 768px) {
+			.navbar-brand img {
+				height: 40px;
+				max-width: 250px;
+			}
+
+			#main-content {
+				padding: 20px 15px;
+			}
+
+			.content-panel {
+				padding: 20px;
+			}
+		}
+	</style>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -39,7 +216,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand">AG Locator</a>
+      <a class="navbar-brand" href="#">
+        <img src="assets/orangeLOGO.png" alt="Assignment Group Locator" />
+      </a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -51,15 +230,6 @@
       </ul>
        <ul class="nav navbar-nav navbar-right">
         <li><a href="help.html">Help</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other Projects <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="http://toothless.unx.sas.com/sslazy/" target="_blank">SS LAZY Signature Database</a></li>
-            <li><a href="http://toothless.unx.sas.com/goats/" target="_blank">GOATS Task Snippets Reference</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="http://toothless.unx.sas.com/fts-clock.html" target="_blank">Follow the Sun Clock</a></li>
-          </ul>
-        </li>
       </ul> 
    </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

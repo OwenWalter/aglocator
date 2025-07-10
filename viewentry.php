@@ -15,15 +15,204 @@
 	<link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
 
 	<!-- Custom styles for this page-->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 	<link href="assets/css/style.css" rel="stylesheet">
 	<link href="assets/css/style-responsive.css" rel="stylesheet">
 	<link href="assets/css/table-responsive.css" rel="stylesheet">
-
-	<!-- CSS Override for the Signature Details page, prevents "pre" tag from formatting low max height -->
+	<link href="assets/css/custom.css" rel="stylesheet">
+	
+	<!-- Modern styling to match index.html -->
 	<style>
-	pre {
-	    max-height: none !important;
-	}	
+		/* SAS Blue Color Palette */
+		:root {
+			--sas-blue: #0074D9;
+			--sas-blue-dark: #005bb5;
+			--sas-blue-light: #4da3e0;
+			--sas-gray-light: #f8f9fa;
+			--sas-gray: #6c757d;
+			--sas-border: #e9ecef;
+		}
+
+		/* Overall page styling */
+		body {
+			font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			background-color: var(--sas-gray-light);
+			color: #333;
+		}
+
+		/* Enhanced modern header styling */
+		.navbar-default {
+			background: linear-gradient(135deg, var(--sas-blue) 0%, var(--sas-blue-dark) 100%);
+			border: none;
+			box-shadow: 0 4px 20px rgba(0,116,217,0.2);
+			margin-bottom: 0;
+			padding: 8px 0;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.navbar-default::before {
+			content: '';
+			position: absolute;
+			top: -50%;
+			right: -10%;
+			width: 100px;
+			height: 200%;
+			background: rgba(255,255,255,0.05);
+			transform: rotate(15deg);
+		}
+
+		.navbar-default::after {
+			content: '';
+			position: absolute;
+			top: -50%;
+			right: -5%;
+			width: 60px;
+			height: 200%;
+			background: rgba(255,255,255,0.03);
+			transform: rotate(15deg);
+		}
+
+		.navbar-brand {
+			padding: 10px 20px;
+			transition: all 0.3s ease;
+			position: relative;
+			z-index: 10;
+		}
+
+		.navbar-brand img {
+			height: 60px;
+			width: auto;
+			max-width: 400px;
+			transition: all 0.3s ease;
+			transform: translateY(-15px);
+		}
+
+		.navbar-nav > li > a {
+			color: rgba(255,255,255,0.9) !important;
+			font-weight: 500;
+			font-size: 16px;
+			padding: 15px 20px !important;
+			transition: all 0.3s ease;
+			position: relative;
+			z-index: 10;
+		}
+
+		.navbar-nav > li > a:hover,
+		.navbar-nav > li > a:focus {
+			color: white !important;
+			background: rgba(255,255,255,0.15) !important;
+			border-radius: 6px;
+		}
+
+		.navbar-nav > .active > a {
+			background: rgba(255,255,255,0.2) !important;
+			border-radius: 6px;
+		}
+
+		/* Main content area */
+		#container {
+			background: white;
+			min-height: 100vh;
+		}
+
+		#main-content {
+			padding: 40px 20px;
+		}
+
+		/* Entry details styling */
+		.wrapper {
+			background: white;
+			padding: 30px;
+			border-radius: 12px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+			margin: 20px 0;
+		}
+
+		.wrapper h3 {
+			color: var(--sas-blue-dark);
+			font-weight: 600;
+			margin-bottom: 10px;
+		}
+
+		.wrapper h4 {
+			color: var(--sas-blue);
+			font-weight: 500;
+			margin-bottom: 8px;
+		}
+
+		.wrapper p {
+			color: #555;
+			font-weight: 500;
+			margin-bottom: 5px;
+		}
+
+		.wrapper pre {
+			background: var(--sas-gray-light);
+			border: 1px solid var(--sas-border);
+			border-radius: 8px;
+			padding: 20px;
+			font-family: 'Roboto', monospace;
+			color: #333;
+			max-height: none !important;
+			white-space: pre-wrap;
+			word-wrap: break-word;
+		}
+
+		.wrapper a {
+			color: var(--sas-blue);
+			text-decoration: none;
+			font-weight: 500;
+			padding: 8px 16px;
+			background: var(--sas-gray-light);
+			border-radius: 6px;
+			border: 1px solid var(--sas-border);
+			display: inline-block;
+			margin-top: 20px;
+			transition: all 0.3s ease;
+		}
+
+		.wrapper a:hover {
+			background: var(--sas-blue);
+			color: white;
+			text-decoration: none;
+			transform: translateY(-1px);
+			box-shadow: 0 4px 12px rgba(0,116,217,0.2);
+		}
+
+		/* Float styling */
+		.goleftfloat {
+			float: left;
+			width: 70%;
+		}
+
+		.gorightfloat {
+			float: right;
+			width: 25%;
+			text-align: right;
+		}
+
+		/* Mobile responsive */
+		@media (max-width: 768px) {
+			.navbar-brand img {
+				height: 40px;
+				max-width: 250px;
+			}
+
+			#main-content {
+				padding: 20px 15px;
+			}
+
+			.wrapper {
+				padding: 20px;
+			}
+
+			.goleftfloat, .gorightfloat {
+				float: none;
+				width: 100%;
+				text-align: left;
+			}
+		}
 	</style>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -46,7 +235,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand">AG Locator</a>
+      <a class="navbar-brand" href="#">
+        <img src="assets/orangeLOGO.png" alt="Assignment Group Locator" />
+      </a>
     </div>
 
 	<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -57,15 +248,6 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="help.html">Help</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other Projects <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="http://toothless.unx.sas.com/sslazy/" target="_blank">SS LAZY Signature Database</a></li>
-            <li><a href="http://toothless.unx.sas.com/goats/" target="_blank">GOATS Task Snippets Reference</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="http://toothless.unx.sas.com/fts-clock.html" target="_blank">Follow the Sun Clock</a></li>
-          </ul>
-        </li>
       </ul> 
    </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

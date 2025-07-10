@@ -15,9 +15,216 @@
 	<link href="assets/font-awesome/css/font-awesome.css" rel="stylesheet" />
 
 	<!-- Custom styles for this page-->
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 	<link href="assets/css/style.css" rel="stylesheet">
 	<link href="assets/css/style-responsive.css" rel="stylesheet">
 	<link href="assets/css/table-responsive.css" rel="stylesheet">
+	<link href="assets/css/custom.css" rel="stylesheet">
+	
+	<!-- Modern styling to match index.html -->
+	<style>
+		/* SAS Blue Color Palette */
+		:root {
+			--sas-blue: #0074D9;
+			--sas-blue-dark: #005bb5;
+			--sas-blue-light: #4da3e0;
+			--sas-gray-light: #f8f9fa;
+			--sas-gray: #6c757d;
+			--sas-border: #e9ecef;
+		}
+
+		/* Overall page styling */
+		body {
+			font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+			background-color: var(--sas-gray-light);
+			color: #333;
+		}
+
+		/* Enhanced modern header styling */
+		.navbar-default {
+			background: linear-gradient(135deg, var(--sas-blue) 0%, var(--sas-blue-dark) 100%);
+			border: none;
+			box-shadow: 0 4px 20px rgba(0,116,217,0.2);
+			margin-bottom: 0;
+			padding: 8px 0;
+			position: relative;
+			overflow: hidden;
+		}
+
+		.navbar-default::before {
+			content: '';
+			position: absolute;
+			top: -50%;
+			right: -10%;
+			width: 100px;
+			height: 200%;
+			background: rgba(255,255,255,0.05);
+			transform: rotate(15deg);
+		}
+
+		.navbar-default::after {
+			content: '';
+			position: absolute;
+			top: -50%;
+			right: -5%;
+			width: 60px;
+			height: 200%;
+			background: rgba(255,255,255,0.03);
+			transform: rotate(15deg);
+		}
+
+		.navbar-brand {
+			padding: 10px 20px;
+			transition: all 0.3s ease;
+			position: relative;
+			z-index: 10;
+		}
+
+		.navbar-brand img {
+			height: 60px;
+			width: auto;
+			max-width: 400px;
+			transition: all 0.3s ease;
+			transform: translateY(-15px);
+		}
+
+		.navbar-nav > li > a {
+			color: rgba(255,255,255,0.9) !important;
+			font-weight: 500;
+			font-size: 16px;
+			padding: 15px 20px !important;
+			transition: all 0.3s ease;
+			position: relative;
+			z-index: 10;
+		}
+
+		.navbar-nav > li > a:hover,
+		.navbar-nav > li > a:focus {
+			color: white !important;
+			background: rgba(255,255,255,0.15) !important;
+			border-radius: 6px;
+		}
+
+		.navbar-nav > .active > a {
+			background: rgba(255,255,255,0.2) !important;
+			border-radius: 6px;
+		}
+
+		/* Main content area */
+		#container {
+			background: white;
+			min-height: 100vh;
+		}
+
+		#main-content {
+			padding: 40px 20px;
+		}
+
+		/* Content section styling */
+		.content-section {
+			background: white;
+			padding: 30px;
+			border-radius: 12px;
+			box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+			margin-bottom: 30px;
+		}
+
+		.content-section h1 {
+			color: var(--sas-blue-dark);
+			font-size: 28px;
+			font-weight: 600;
+			margin-bottom: 25px;
+			text-align: center;
+		}
+
+		.content-section p {
+			font-size: 16px;
+			line-height: 1.6;
+			margin-bottom: 15px;
+			color: #555;
+		}
+
+		.content-section p:first-of-type {
+			font-weight: 600;
+			color: var(--sas-blue-dark);
+		}
+
+		/* Form styling */
+		.form-panel {
+			background: linear-gradient(135deg, var(--sas-gray-light) 0%, #e9ecef 100%);
+			padding: 30px;
+			border-radius: 12px;
+			border: 1px solid var(--sas-border);
+			box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+		}
+
+		.form-panel label {
+			font-weight: 600;
+			color: var(--sas-blue-dark);
+			font-size: 16px;
+			margin-bottom: 10px;
+			display: block;
+		}
+
+		.form-panel input[type="text"] {
+			width: 100%;
+			padding: 12px 16px;
+			border: 2px solid var(--sas-border);
+			border-radius: 8px;
+			font-size: 16px;
+			transition: all 0.3s ease;
+			margin-bottom: 20px;
+		}
+
+		.form-panel input[type="text"]:focus {
+			border-color: var(--sas-blue);
+			box-shadow: 0 0 0 4px rgba(0,116,217,0.1);
+			outline: none;
+		}
+
+		.form-panel input[type="submit"] {
+			background: var(--sas-blue);
+			color: white;
+			border: none;
+			padding: 12px 30px;
+			border-radius: 8px;
+			font-size: 16px;
+			font-weight: 600;
+			cursor: pointer;
+			transition: all 0.3s ease;
+			box-shadow: 0 4px 12px rgba(0,116,217,0.2);
+		}
+
+		.form-panel input[type="submit"]:hover {
+			background: var(--sas-blue-dark);
+			transform: translateY(-2px);
+			box-shadow: 0 6px 20px rgba(0,116,217,0.3);
+		}
+
+		/* Mobile responsive */
+		@media (max-width: 768px) {
+			.navbar-brand img {
+				height: 40px;
+				max-width: 250px;
+			}
+
+			#main-content {
+				padding: 20px 15px;
+			}
+
+			.content-section {
+				padding: 20px;
+			}
+
+			.content-section h1 {
+				font-size: 24px;
+			}
+
+			.form-panel {
+				padding: 20px;
+			}
+		}
+	</style>
 
 	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 	<!--[if lt IE 9]>
@@ -27,7 +234,7 @@
 
 </head>
 
-<body onLoad="document.forms.search.part.focus()">
+<body>
 
 <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -39,7 +246,9 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand">AG Locator</a>
+      <a class="navbar-brand" href="#">
+        <img src="assets/orangeLOGO.png" alt="Assignment Group Locator" />
+      </a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -47,67 +256,48 @@
       <ul class="nav navbar-nav">
         <li><a href="index.html">Search</a></li>
         <li><a href="updatecontent.html">Add New Entry</a></li>
-	<li class="active"><a href="requestkey.html">Request Author Key<span class="sr-only">(current)</span></a></li>
+		<li class="active"><a href="requestkey.html">Request Author Key<span class="sr-only">(current)</span></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="help.html">Help</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other Projects <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="http://toothless.unx.sas.com/sslazy/" target="_blank">SS LAZY Signature Database</a></li>
-            <li><a href="http://toothless.unx.sas.com/goats/" target="_blank">GOATS Task Snippets Reference</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="http://toothless.unx.sas.com/fts-clock.html" target="_blank">Follow the Sun Clock</a></li>
-          </ul>
-        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
 </nav>
 
-
-		<section id="container" >
-
-			<!--main content start-->
-			<section id="main-content" style="margin-left: 0px;">
-				<section class="wrapper">
-
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						<p style="font-weight:bold;">Use this page to obtain your unique update key for editing the entries you have submitted to AG Locator database.</p><br>
+<section id="container">
+	<!--main content start-->
+	<section id="main-content" style="margin-left: 0px;">
+		<section class="wrapper">
+			<div class="row">
+				<div class="col-xs-12 col-sm-10 col-md-8 col-lg-8 col-sm-offset-1 col-md-offset-2 col-lg-offset-2">
+					<div class="content-section">
+						<h1><i class="fa fa-key"></i> Request Author Key</h1>
+						<p>Use this page to obtain your unique update key for editing the entries you have submitted to AG Locator database.</p>
 						<p>Your author key will be emailed to the address provided shortly after the request is submitted. Be sure to specify the email address used when the entry was created. The current author email address is shown at the top of the page when modifying a signature.</p>
 						<p>Existing database entries are only able to be updated by the original author (validated by their email address). If you feel that another user's entry needs to be edited, have taken over the role of the former author, or need to perform bulk updates, please <a href="help.html">contact the team</a> for assistance.</p>
-						</div>
-
 					</div>
 
-					<div class="row mt">
-						<div class="col-lg-12">
-
-							<div class="content-panel" style="background-color:#e6e6e6;">
-                                                                                <form action="php/calc_updatekey.php" method="post">
-												<span style="margin-left:10px; font-weight:bold;">Please enter your email address:</span><br>
-												<input type="text" size="60" name="author_email" style="margin-left:10px;" required><br>
-												<input type="submit" value="Request Author Key" style="margin:10px; background-color:#04304b; color:#fff">
-										</form>
-							</div><!-- /content-panel -->
-						</div><!-- /col-lg-4 -->
-					</div><!-- /row -->
-				</section>
-				<! --/wrapper -->
-			</section><!-- /MAIN CONTENT -->
-
-			<!--main content end-->
-
+					<div class="form-panel">
+						<form action="php/calc_updatekey.php" method="post">
+							<label for="author_email">Please enter your email address:</label>
+							<input type="text" name="author_email" id="author_email" required>
+							<input type="submit" value="Request Author Key">
+						</form>
+					</div>
+				</div>
+			</div>
 		</section>
+	</section><!-- /MAIN CONTENT -->
+</section>
 
-		<!-- place JS scripts at end of page for faster load times -->
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-		<script src="assets/js/bootstrap.min.js"></script>
-		<script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+<!-- place JS scripts at end of page for faster load times -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
 
-		<!--script for this page-->
-		<script type="text/javascript" src="scripts/triggers.js"></script>
+<!--script for this page-->
+<script type="text/javascript" src="scripts/triggers.js"></script>
 
-	</body>
+</body>
 </html>
