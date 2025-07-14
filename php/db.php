@@ -17,8 +17,6 @@ $dbpass = "";
 
 // ---------------------------
 // DO NOT EDIT BELOW THIS LINE
-// Set defaul connection params
-global $test_db;
 
 $test_db = new mysqli();
 $test_db->connect($dbhost, $dbuser, $dbpass, $dbname);

@@ -198,7 +198,6 @@
 		.form-panel input[type="submit"]:hover {
 			background: var(--sas-blue-dark);
 			transform: translateY(-2px);
-			box-shadow: 0 6px 20px rgba(0,116,217,0.3);
 		}
 
 		/* Mobile responsive */
@@ -226,12 +225,6 @@
 		}
 	</style>
 
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
-
 </head>
 
 <body>
@@ -246,7 +239,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="index.html">
         <img src="assets/orangeLOGO.png" alt="Assignment Group Locator" />
       </a>
     </div>
@@ -270,34 +263,31 @@
 	<section id="main-content" style="margin-left: 0px;">
 		<section class="wrapper">
 			<div class="row">
-				<div class="col-xs-12 col-sm-10 col-md-8 col-lg-8 col-sm-offset-1 col-md-offset-2 col-lg-offset-2">
-					<div class="content-section">
-						<h1><i class="fa fa-key"></i> Request Author Key</h1>
-						<p>Use this page to obtain your unique update key for editing the entries you have submitted to AG Locator database.</p>
-						<p>Your author key will be emailed to the address provided shortly after the request is submitted. Be sure to specify the email address used when the entry was created. The current author email address is shown at the top of the page when modifying a signature.</p>
-						<p>Existing database entries are only able to be updated by the original author (validated by their email address). If you feel that another user's entry needs to be edited, have taken over the role of the former author, or need to perform bulk updates, please <a href="help.html">contact the team</a> for assistance.</p>
-					</div>
-
+				<div class="col-xs-12 col-sm-10 col-md-8 col-sm-offset-1 col-md-offset-2">
 					<div class="form-panel">
+						<h1>Request an Author Key</h1>
+						<p>To add or modify entries in the database, you need a unique Author Key. This key is tied to your email address and is used to verify your identity.</p>
+						<p>Enter your email address below, and a new key will be generated and sent to you.</p>
+						<hr>
 						<form action="php/calc_updatekey.php" method="post">
-							<label for="author_email">Please enter your email address:</label>
-							<input type="text" name="author_email" id="author_email" required>
-							<input type="submit" value="Request Author Key">
+							<div class="form-group">
+								<label for="email">Your Email Address:</label>
+								<input type="email" class="form-control" name="email" id="email" placeholder="Enter your email address" required>
+							</div>
+							<div style="text-align: center;">
+								<button type="submit" class="btn btn-primary">Request Key</button>
+							</div>
 						</form>
 					</div>
 				</div>
 			</div>
 		</section>
-	</section><!-- /MAIN CONTENT -->
+	</section>
 </section>
 
 <!-- place JS scripts at end of page for faster load times -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="assets/js/jquery.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
-<script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
-
-<!--script for this page-->
-<script type="text/javascript" src="scripts/triggers.js"></script>
 
 </body>
 </html>

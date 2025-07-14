@@ -1,67 +1,59 @@
 <?php
-//require_once '/path/to/database/configfile/db.php';    //Refer to db.php-example
 require_once 'db.php';
-//require_once '/path/to/file/containing/secrets/authorkey-salts.php';    //Refer to authorkey-salts.php-example
 require_once 'authorkey-salts.php';
 
-$authoremail = $_POST['author_email'];
+// Stop execution with a generic error message.
+function fail_with_error($message = 'An unexpected error occurred. Please contact an administrator.') {
+    exit($message);
+}
 
-if (!empty($authoremail)) {
+// Get and validate the email from the form post.
+$author_email = isset($_POST['email']) ? trim($_POST['email']) : '';
+if (!filter_var($author_email, FILTER_VALIDATE_EMAIL)) {
+    fail_with_error('Invalid email address provided. Please go back and enter a valid email.');
+}
 
-$sql = "SELECT author_email FROM live_table
-WHERE author_email = '$authoremail'";
+// Check if the email exists in the database using a prepared statement.
+$stmt = $test_db->prepare("SELECT author_email FROM live_table WHERE author_email = ? LIMIT 1");
+$stmt->bind_param("s", $author_email);
+$stmt->execute();
+$result = $stmt->get_result();
 
-if (mysqli_query($test_db, $sql)) { //check database for user email, and only if it exists (returns a result), calculate the keycode
-	$result = (mysqli_query($test_db, $sql));
-        //echo $result; //DEBUG
-	if (mysqli_num_rows($result) > 0) {
-		//Make the user's unique update keycode based on their email.
-                //Values for $Sugar, $Spice, and $EverythingNice come from authorkey-salts.php file (loaded at the top of this program)
-	        $parsley = $Sugar . $authoremail . $Spice;
-	        $sage = hash('sha256', $parsley);
-	        $rosemary = $sage . $EverythingNice;
-	        $thyme = hash('crc32', $rosemary);
-        	
-		//echo "Update Keycode: " . $thyme;	//DEBUG USE ONLY, DO NOT UNCOMMENT
-		
-		//Pass the sugar
-		$email_subject = "AG Locator Author Key Request";
-		$email_message = "
-		<html>
-		<head>
-		<title>AG Locator on Toothless - Author Key Request</title>
-		</head>
-		<body>
-		<p>The following author key can be used to update any entries on the AG Locator tool created by the author (email address) where this message was sent:<p>
-		<br>
-		<b><h3>$thyme</h3></b>
-		<br>
-		<p>Thanks for helping maintain the AG Locator data!</p>
-		<br>
-		<br>
-		<p align=\"right\"><small><i>Questions? Please <a href=\"http://toothless.unx.sas.com/cheatsheet/help.html\" target=\"_blank\">contact the AG Locator team</a>.</i></small></p>
-		</body>
-		</html>
-		";
-		$email_headers = "MIME-Version: 1.0" . "\r\n";
-		$email_headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
-		$email_headers .= 'From: <replies-disabled@toothless.unx.sas.com>' . "\r\n";
-		mail($authoremail,$email_subject,$email_message,$email_headers); //sends email using PHP internal mail function
-		header("Location: ../success-key.html");
-	} else {
-		echo "Provided email address was not found. Please contact andy.foreman@sas.com for assistance.";
-		mysqli_close($test_db);
-		exit(1);
-	}
+if ($result->num_rows > 0) {
+    // Email exists, so calculate the key.
+    // Values for $Sugar, $Spice, and $EverythingNice come from authorkey-salts.php
+    $parsley = $Sugar . $author_email . $Spice;
+    $sage = hash('sha256', $parsley);
+    $rosemary = $sage . $EverythingNice;
+    $author_key = hash('crc32', $rosemary);
+
+    // Prepare and send the email.
+    $email_subject = "Your AG Locator Author Key";
+    $email_body = "
+    <html>
+    <body>
+        <p>Your requested author key is below. Use this key to update any entries you've created.</p>
+        <br>
+        <h3 style='font-family: monospace; background: #f0f0f0; padding: 10px; border-radius: 5px; display: inline-block;'>{$author_key}</h3>
+        <br>
+        <p>Thank you for helping maintain the AG Locator data!</p>
+    </body>
+    </html>";
+    
+    $email_headers = "MIME-Version: 1.0" . "\r\n";
+    $email_headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+    $email_headers .= 'From: <AGLocator@noreply.com>' . "\r\n";
+
+    if (mail($author_email, $email_subject, $email_body, $email_headers)) {
+        header("Location: ../success-key.html");
+    } else {
+        fail_with_error('Could not send the author key email. Please contact an administrator.');
+    }
 } else {
-    	echo "Error: " . $sql . "<br>" . mysqli_error($test_db);
+    // Email not found in the database.
+    fail_with_error('The provided email address was not found in our records. Only registered authors can receive a key.');
 }
 
-mysqli_close($test_db);
-}
-
-else {
-echo 'An error has ocurred. Please contact andy.foreman@sas.com for assistance.';
-}
-
+$stmt->close();
+$test_db->close();
 ?>

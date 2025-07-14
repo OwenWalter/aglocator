@@ -366,18 +366,7 @@
 			from { opacity: 0; transform: translateY(15px); }
 			to { opacity: 1; transform: translateY(0); }
 		}
-
-		/* Hide legacy filter status */
-		#filterStatus {
-			display: none !important;
-		}
 	</style>
-
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
 
 </head>
 
@@ -450,12 +439,6 @@
 										</span>
 									</div>
 								</form>
-								
-								<!-- Legacy filter status for debugging -->
-								<div id="filterStatus" style="margin-top: 5px; font-size: 12px; color: #666; display: none;">
-									<span class="glyphicon glyphicon-filter"></span> Filtered by: <span id="currentFilter">All Categories</span>
-									<a href="#" id="clearFilter" style="margin-left: 10px; font-size: 11px;">Clear Filter</a>
-								</div>
 							</div>
 						</div>
 					</div>
@@ -475,6 +458,9 @@
 										</thead>
 										<tbody></tbody>
 									</table>
+									<div id="loading" style="display: none; text-align: center; padding: 20px;">
+										<p>Loading more results...</p>
+									</div>
 								</section>
 							</div><!-- /content-panel -->
 						</div><!-- /col -->
@@ -493,20 +479,27 @@
 		<script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
 
 		<!--script for this page-->
-		<!-- <script type="text/javascript" src="scripts/triggers.js"></script> -->
 		<script type="text/javascript" src="scripts/votesystem.js"></script>
 		
-		<!-- Test script to debug JavaScript loading -->
 		<script type="text/javascript">
-			console.log('Inline script loaded - JavaScript is working');
-			
-			// Global variable to track current filter
 			var currentCategoryFilter = '';
-			
+			var currentPage = 1;
+			var isLoading = false;
+			var hasMoreResults = true;
+			var searchTimer;
+
 			$(document).ready(function() {
-				console.log('jQuery is working');
-				
-				// Part 1: Check for a search term in the URL path. If found, store it and redirect.
+				// Part 1: Handle URL-based search terms
+				handleUrlSearch();
+
+				// Part 2: Initialize event listeners
+				setupEventListeners();
+
+				// Hide results table initially
+				$(".tablesearch").hide();
+			});
+
+			function handleUrlSearch() {
 				var path = window.location.pathname;
 				var searchMarker = '/index.html/';
 				var markerIndex = path.indexOf(searchMarker);
@@ -515,120 +508,117 @@
 					var searchTermFromUrl = path.substring(markerIndex + searchMarker.length);
 					if (searchTermFromUrl) {
 						var decodedTerm = decodeURIComponent(searchTermFromUrl.replace(/-/g, ' '));
-						// Store the term and redirect to the clean URL.
 						sessionStorage.setItem('urlSearchTerm', decodedTerm);
-						window.location.href = '/ag-locator-main/index.html';
-						return; // Stop script execution for the current page load.
+						window.location.href = '/ag-locator-main/index.html'; // Redirect to clean URL
+						return; // Stop execution
 					}
 				}
 
-				// Part 2: On page load, check if a term was stored from a redirect.
 				var storedSearchTerm = sessionStorage.getItem('urlSearchTerm');
 				if (storedSearchTerm) {
 					$('input#name').val(storedSearchTerm);
-					$(".tablesearch").fadeIn(300);
-					search(); // Call the existing search function.
-					
-					// Clean up the stored term so it doesn't run on a normal refresh.
 					sessionStorage.removeItem('urlSearchTerm');
-				} else {
-					// Hide search results initially only if not performing a stored search.
-					$(".tablesearch").hide();
+					triggerNewSearch(); 
 				}
-				
-				// Search function with filter support
-				function search() {
-					var query_value = $('input#name').val();
-					console.log('Search called with query:', query_value, 'filter:', currentCategoryFilter);
-					if(query_value !== ''){
-						$.ajax({
-							type: "POST",
-							url: "php/search.php",
-							data: { 
-								query: query_value,
-								category_filter: currentCategoryFilter
-							},
-							cache: false,
-							success: function(html){
-								console.log('Search successful, updating results');
-								$("table#resultTable tbody").html(html);
-							},
-							error: function(xhr, status, error) {
-								console.log('Search error:', error);
-							}
-						});
-					}
-					return false;    
-				}
-				
-				// Handle search input
-				$("input#name").live("keyup", function(e) {
-					// Set Timeout
-					clearTimeout($.data(this, 'timer'));
-					
-					// Set Search String
+			}
+
+			function setupEventListeners() {
+				// Search on keyup
+				$("input#name").on("keyup", function() {
+					clearTimeout(searchTimer);
 					var search_string = $(this).val();
-					
-					// Do Search
-					if (search_string == '') {
-						$(".tablesearch").fadeOut(300);
-					}else{
-						$(".tablesearch").fadeIn(300);
-						$(this).data('timer', setTimeout(search, 100));
-					};
+					if (search_string.length > 1 || search_string.length === 0) {
+						searchTimer = setTimeout(triggerNewSearch, 250); // Increased delay for better UX
+					}
 				});
-				
-				// Simple click test for filter button
-				$('#filterBtn').click(function() {
-					console.log('Filter button clicked');
-				});
-				
-				// Handle dropdown item clicks
+
+				// Category filter clicks
 				$(document).on('click', '#categoryFilter a', function(e) {
 					e.preventDefault();
-					console.log('Dropdown item clicked:', $(this).text());
-					
 					var category = $(this).data('category') || '';
-					console.log('Category data:', category);
-					
-					// Update current filter
 					currentCategoryFilter = category;
 					
-					// Show/hide the filter pill
 					if (category) {
 						$('#filterPill .filter-text').text(category);
 						$('#filterPill').show();
 					} else {
 						$('#filterPill').hide();
 					}
-					
-					// Trigger search if there's a current query
-					var current_query = $('input#name').val();
-					if (current_query !== '') {
-						console.log('Triggering search with filter');
-						search();
-					}
-					
-					console.log('Filter set to:', currentCategoryFilter);
+					triggerNewSearch();
 				});
-				
-				// Handle pill close button
+
+				// Remove filter pill
 				$(document).on('click', '#filterPill .close', function(e) {
 					e.preventDefault();
-					console.log('Filter pill close clicked');
-					
-					// Clear the filter
 					currentCategoryFilter = '';
 					$('#filterPill').hide();
-					
-					// Trigger search if there's a current query
-					var current_query = $('input#name').val();
-					if (current_query !== '') {
-						console.log('Re-running search without filter');
-						search();
+					triggerNewSearch();
+				});
+
+				// Infinite scroll
+				$(window).on('scroll', function() {
+					// Check if we're near the bottom, not already loading, and there are more results
+					if ($(window).scrollTop() + $(window).height() >= $(document).height() - 200 && !isLoading && hasMoreResults) {
+						loadResults();
 					}
 				});
-			});
+			}
+
+			function triggerNewSearch() {
+				currentPage = 1;
+				hasMoreResults = true;
+				$("table#resultTable tbody").empty(); // Clear previous results immediately
+				
+				var query_value = $('input#name').val();
+				if (query_value.length > 1) {
+					$(".tablesearch").fadeIn(300);
+					loadResults();
+				} else {
+					$(".tablesearch").fadeOut(300);
+				}
+			}
+
+			function loadResults() {
+				var query_value = $('input#name').val();
+				if (isLoading || !hasMoreResults || query_value.length <= 1) {
+					return; // Don't load if already loading, no more results, or query is too short
+				}
+
+				isLoading = true;
+				$('#loading').show();
+
+				$.ajax({
+					type: "POST",
+					url: "php/search.php",
+					data: {
+						query: query_value,
+						category_filter: currentCategoryFilter,
+						page: currentPage
+					},
+					cache: false,
+					success: function(html) {
+						if ($.trim(html).length > 0) {
+							$("table#resultTable tbody").append(html);
+							currentPage++;
+						} else {
+							hasMoreResults = false; // No more results from the server
+							if (currentPage === 1) {
+								// This case is handled by the PHP script now, but as a fallback:
+								$("table#resultTable tbody").html('<tr><td colspan="4">No results found.</td></tr>');
+							}
+						}
+					},
+					error: function() {
+						if (currentPage === 1) { // Show error only on the first load attempt
+							$("table#resultTable tbody").html('<tr><td colspan="4">An error occurred while searching.</td></tr>');
+						}
+					},
+					complete: function () {
+						isLoading = false;
+						$('#loading').hide();
+					}
+				});
+			}
 		</script>
 
 	</body>

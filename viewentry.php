@@ -206,15 +206,9 @@
 		}
 	</style>
 
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
-
 </head>
 
-<body onLoad="document.forms.search.part.focus()">
+<body>
 
 <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -226,7 +220,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="index.html">
         <img src="assets/orangeLOGO.png" alt="Assignment Group Locator" />
       </a>
     </div>
@@ -248,87 +242,79 @@
 	<section id="main-content" style="margin-left: 0px;">
 		<section class="wrapper">
 			<div class="row">
-				<div class="col-lg-10 col-lg-offset-1">
-<?php
-//require_once '/path/to/database/configfile/db.php';    //Refer to db.php-example
-require_once 'php/db.php';
+				<div class="col-xs-12 col-md-8 col-md-offset-2">
+					<?php
+					//require_once '/path/to/database/configfile/db.php';    //Refer to db.php-example
+					require_once 'php/db.php';
 
-// Get the ID for the selected entry
-$entryID = htmlspecialchars($_GET["id"]);
+					$id = isset($_GET['id']) ? $_GET['id'] : '';
 
-// Query
-$query = "SELECT * FROM live_table WHERE id = '".$entryID."'";
+					if (!empty($id) && is_numeric($id)) {
+						// Use prepared statements to prevent SQL injection
+						$stmt = $test_db->prepare("SELECT * FROM live_table WHERE id = ?");
+						$stmt->bind_param("i", $id);
+						$stmt->execute();
+						$result = $stmt->get_result();
 
-// Do the query
-$result = $test_db->query($query);
-$entry_data = $result->fetch_assoc();
+						if ($result->num_rows > 0) {
+							$row = $result->fetch_assoc();
 
-// Check for results and display
-if ($entry_data) {
-	$d_keyword = htmlspecialchars($entry_data['entry_keyword']);
-	$d_category = htmlspecialchars($entry_data['entry_category']);
-	$d_subcat = htmlspecialchars($entry_data['entry_subcategory']);
-	$d_assigngroup = htmlspecialchars($entry_data['assign_group']);
-	$d_notes = htmlspecialchars($entry_data['notes']);
-	$d_smittime = htmlspecialchars($entry_data['smit_time']);
-	$d_updttime = htmlspecialchars($entry_data['updt_time']);
-
-	// Build category string
-	$category_string = $d_category;
-	if ($d_subcat) {
-		$category_string .= ' / ' . $d_subcat;
-	}
-
-	// Output the modernized HTML structure
-	echo '
-	<div class="entry-wrapper">
-		<div class="entry-header">
-			<h1 class="entry-keyword">' . $d_keyword . '</h1>
-			<p class="entry-category">' . $category_string . '</p>
-		</div>
-		<div class="entry-body">
-			<div class="assignment-group-section">
-				<div class="label">ASSIGNMENT GROUP</div>
-				<div class="group-name">' . $d_assigngroup . '</div>
-			</div>
-			<div class="notes-section">
-				<div class="label">Additional Notes</div>
-				<pre>' . ($d_notes ? $d_notes : "No additional notes provided.") . '</pre>
-			</div>
-		</div>
-		<div class="entry-footer">
-			<div class="entry-meta">
-				Created: ' . $d_smittime . ' | Last Modified: ' . $d_updttime . '
-			</div>
-			<a href="modifycontent.php?id=' . $entryID . '" class="btn-modify-entry">
-				<i class="fa fa-pencil"></i> Modify This Entry
-			</a>
-		</div>
-	</div>';
-
-} else {
-	// Error message if no entry is found
-	echo '
-	<div class="alert alert-danger">
-		<h4><i class="fa fa-exclamation-triangle"></i> Error: Entry Not Found</h4>
-		<p>The requested entry ID could not be found in the database. Please check the ID and try again.</p>
-		<a href="index.html" class="btn btn-danger" style="margin-top:10px;">Return to Search</a>
-	</div>';
-}
-?>
+							// Sanitize output
+							$entry_keyword = htmlspecialchars($row['entry_keyword']);
+							$entry_category = htmlspecialchars($row['entry_category']);
+							$assign_group = htmlspecialchars($row['assign_group']);
+							$notes = nl2br(htmlspecialchars($row['notes']));
+							$entry_id = htmlspecialchars($row['id']);
+							$updt_time = htmlspecialchars($row['updt_time']);
+							
+							// Make URLs in notes clickable
+							$urlregex = '~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i';
+							$notes = preg_replace($urlregex, '<a href="$0" target="_blank" title="$0">$0</a>', $notes);
+					?>
+							<div class="entry-wrapper">
+								<div class="entry-header">
+									<h1 class="entry-keyword"><?php echo $entry_keyword; ?></h1>
+									<p class="entry-category"><?php echo $entry_category; ?></p>
+								</div>
+								<div class="entry-body">
+									<div class="assignment-group-section">
+										<span class="label">ASSIGNMENT GROUP</span>
+										<div class="group-name"><?php echo $assign_group; ?></div>
+									</div>
+									<div class="notes-section">
+										<span class="label">NOTES</span>
+										<pre><?php echo $notes; ?></pre>
+									</div>
+								</div>
+								<div class="entry-footer">
+									<div class="entry-meta">
+										Last Updated: <?php echo $updt_time; ?>
+									</div>
+									<a href="modifycontent.php?id=<?php echo $entry_id; ?>" class="btn-modify-entry">Modify Entry</a>
+								</div>
+							</div>
+					<?php
+						} else {
+							echo "<div class='alert alert-danger'>Entry not found.</div>";
+						}
+						$stmt->close();
+					} else {
+						echo "<div class='alert alert-warning'>No entry ID specified.</div>";
+					}
+					$test_db->close();
+					?>
 				</div>
 			</div>
 		</section>
 	</section>
 </section>
 
-<!-- place JS scripts at end of page for faster load times -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<!-- js placed at the end of the document so the pages load faster -->
+<script src="assets/js/jquery.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
 <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
 
 <!--script for this page-->
-<script type="text/javascript" src="scripts/triggers.js"></script>
 <script type="text/javascript" src="scripts/votesystem.js"></script>
 
 </body>

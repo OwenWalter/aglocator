@@ -1,131 +1,121 @@
 <?php
-//require_once '/path/to/database/configfile/db.php';    //Refer to db.php-example
 require_once 'db.php';
 
-// Log received parameters for debugging (only to error log, not output)
-error_log("Search.php called with POST data: " . print_r($_POST, true));
+// --- Configuration ---
+$limit = 20; // Number of results per page
 
-// Output HTML formats
-$html = '<tr>';
-$html .= '<td class="small"><a href="viewentry.php?id=idString" target="_blank">keywordString</a></td>';
-$html .= '<td class="small">categoryString</td>';
-$html .= '<td class="small"><a href="viewgroup.php?name=groupNameString" target="_blank">assigngroupString</a></td>';
-$html .= '<td class="small">notesString</td>';
-$html .= '</tr>';
-
-// Get the Search
-$search_string = preg_replace("/[%]/", " ", $_POST['query']);
-$search_string = $test_db->real_escape_string($search_string);
-
-// Get the Category Filter
+// --- Input Processing ---
+$search_string = isset($_POST['query']) ? trim($_POST['query']) : '';
 $category_filter = isset($_POST['category_filter']) ? $_POST['category_filter'] : '';
-$category_filter = $test_db->real_escape_string($category_filter);
+$page = isset($_POST['page']) ? (int)$_POST['page'] : 1;
+$offset = ($page - 1) * $limit;
 
-// Log the processed values
-error_log("Processed search_string: '$search_string', category_filter: '$category_filter'");
+$has_wildcards = preg_match('/[*?#]/', $search_string);
 
-// Check if length is more than 1 character
+// --- Main Logic ---
+
+// Check if there is a valid search string
 if (strlen($search_string) > 1 && $search_string !== ' ') {
-	//Insert Time Stamp
-	$time = "UPDATE query_data SET timestamp=now() WHERE signame='" .$search_string. "'";
-	//Count how many times a query occurs
-	$query_count = "UPDATE query_data SET querycount = querycount +1 WHERE signame='" .$search_string. "'";
-	// Query
-	if (substr($search_string,0,1) === '#') { //Tag (meta-search) mode. Tags start with #.
 
+    $query = '';
+    $params = [];
+    $types = '';
 
-		// Show recent entries. #recent:days
-		if (substr($search_string,1,6) === 'recent') { //php7 does not have str_contains so we must explicitly define metatag word as substring
-			if (substr($search_string,7,1) === ':') { //if user is defining a lentth for recent (in days)
-				$reclen = substr($search_string, strpos($search_string, ':') + 1); //get number of days specified
-			}
-			else { $reclen=30; } //default to 30 days
-		$query = 'SELECT * FROM live_table WHERE updt_time BETWEEN DATE_SUB(NOW(), INTERVAL '.$reclen.' DAY) AND NOW()';
-		
-		// Add category filter if specified
-		if (!empty($category_filter)) {
-			$query .= ' AND entry_category = "'.$category_filter.'"';
-		}
-		
-		$query .= ' ORDER BY updt_time DESC';
-		}
+    // Base query parts
+    $select_clause = 'SELECT * FROM live_table';
+    $where_conditions = [];
+    $order_clause = 'ORDER BY orig_datasrc ASC, entry_keyword ASC, entry_category ASC';
 
+    // Build the query based on the search mode
+    if (substr($search_string, 0, 1) === '#') { // Tag (meta-search) mode
+        if (strpos($search_string, '#recent') === 0) {
+            $reclen = 30; // Default to 30 days
+            if (strpos($search_string, ':') !== false) {
+                $parts = explode(':', $search_string);
+                $reclen = (int)end($parts);
+            }
+            $select_clause = 'SELECT * FROM live_table';
+            $where_conditions[] = 'updt_time BETWEEN DATE_SUB(NOW(), INTERVAL ? DAY) AND NOW()';
+            $types .= 'i';
+            $params[] = $reclen;
+            $order_clause = 'ORDER BY updt_time DESC';
+        }
+    } else if ($has_wildcards) { // Wildcard search mode
+        $pattern = str_replace([' * ', '*', '?', '#'], ['\s+[a-zA-Z0-9_]+\s+', '.*', '.', '.?'], $search_string);
+        $where_conditions[] = '(entry_keyword REGEXP ? OR entry_category REGEXP ? OR entry_subcategory REGEXP ? OR assign_group REGEXP ? OR notes REGEXP ?)';
+        for ($i = 0; $i < 5; $i++) {
+            $types .= 's';
+            $params[] = $pattern;
+        }
+    } else { // Normal (keyword-search) mode
+        $search_term_like = '%' . $search_string . '%';
+        $where_conditions[] = '(entry_keyword LIKE ? OR entry_category LIKE ? OR entry_subcategory LIKE ? OR assign_group LIKE ? OR notes LIKE ?)';
+        for ($i = 0; $i < 5; $i++) {
+            $types .= 's';
+            $params[] = $search_term_like;
+        }
+    }
 
-		else {
-		$query = 'SELECT * FROM live_table LIMIT 0'; //Failsafe, make a query to fill variables, but do nothing
-		}
-	}
-	else { //Normal (keyword-search) mode
-	
-	// Build the base search query with parentheses for proper operator precedence
-	$query = 'SELECT * FROM live_table WHERE (entry_keyword LIKE "%'.$search_string.'%" OR entry_category LIKE "%'.$search_string.'%" OR entry_subcategory LIKE "%'.$search_string.'%" OR assign_group LIKE "%'.$search_string.'%" OR notes LIKE "%'.$search_string.'%")';
-	
-	// Add category filter if specified - this will apply to ALL results from the search
-	if (!empty($category_filter)) {
-		$query .= ' AND entry_category = "'.$category_filter.'"';
-	}
-	
-	$query .= ' ORDER BY orig_datasrc ASC, entry_keyword ASC, entry_category ASC';
+    // Add category filter if specified
+    if (!empty($category_filter)) {
+        $where_conditions[] = 'entry_category = ?';
+        $types .= 's';
+        $params[] = $category_filter;
+    }
 
-	}
+    // --- Final Query Construction ---
+    if (!empty($where_conditions)) {
+        $query = $select_clause . ' WHERE ' . implode(' AND ', $where_conditions) . ' ' . $order_clause . ' LIMIT ? OFFSET ?';
+        $types .= 'ii';
+        $params[] = $limit;
+        $params[] = $offset;
+    }
 
-	// Log the final query for debugging
-	error_log("Final SQL query: $query");
-	
-	//Timestamp entry of search for later display
-	$time_entry = $test_db->query($time);
-	//Count how many times a query occurs
-	$query_count = $test_db->query($query_count);
-	// Do the search
-	$result = $test_db->query($query);
-	
-	if (!$result) {
-		error_log("SQL query failed: " . $test_db->error);
-		echo('<tr><td colspan="4" class="small"><span class="label label-danger">Database Error: ' . htmlspecialchars($test_db->error) . '</span></td></tr>');
-		exit;
-	}
-	
-	while($results = $result->fetch_array()) {
-		$result_array[] = $results;
-	}
-	
-	// Log result count
-	$result_count = isset($result_array) ? count($result_array) : 0;
-	error_log("Query returned $result_count results");
-	
-	// Check for results
-	if (isset($result_array)) {
-		foreach ($result_array as $result) {
-		// Output strings and highlight the matches
-		 $d_keyword = htmlspecialchars($result['entry_keyword']);
-                 $d_category = htmlspecialchars($result['entry_category']);
-                 $d_subcat = htmlspecialchars($result['entry_subcategory']);
-		 $d_assigngroup = htmlspecialchars($result['assign_group']);
-		 $d_assigngroup_url = urlencode(strtolower($result['assign_group']));
-		 $d_notes = htmlspecialchars($result['notes']);
-		 $d_id = htmlspecialchars($result['id']);
-			//make url clickable
-			$urlregex = '~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i'; //define what a URL looks like, too aggressive and non-URLs will become links
-			$d_notes = preg_replace($urlregex,'<a href="$0" target="_blank" title="$0">$0</a>',$d_notes); //rewrite d_notes adding <a> tag hrefs where match
-		// Replace the items into above HTML
-		$o = str_replace('keywordString', $d_keyword, $html);
-                $o = str_replace('categoryString', $d_category, $o);
-                $o = str_replace('assigngroupString', $d_assigngroup, $o);
-		$o = str_replace('groupNameString', $d_assigngroup_url, $o);
-		$o = str_replace('notesString', $d_notes, $o);
-		$o = str_replace('idString', $d_id, $o);
-		// Output it
-		echo($o);
-			}
-		}else{
-		// Replace for no results
-		$o = str_replace('keywordString', '<span class="label label-danger">No Matching Results Found</span>', $html);
-		$o = str_replace('categoryString', '', $o);
-		$o = str_replace('assigngroupString', '', $o);
-		$o = str_replace('notesString', '', $o);
-		$o = str_replace('idString', '', $o);
-		// Output
-		echo($o);
-	}
+    // --- Database Execution ---
+    if (!empty($query)) {
+        $stmt = $test_db->prepare($query);
+
+        if (!$stmt) {
+            // It's better to log the actual DB error for admins, and show a generic message to users.
+            echo('<tr><td colspan="4" class="small"><span class="label label-danger">Query Error. Please contact an administrator.</span></td></tr>');
+            exit;
+        }
+        
+        $stmt->bind_param($types, ...$params);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        
+        if ($result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                // Sanitize output and prepare data for display
+                $d_keyword = htmlspecialchars($row['entry_keyword']);
+                $d_category = htmlspecialchars($row['entry_category']);
+                $d_assigngroup = htmlspecialchars($row['assign_group']);
+                $d_assigngroup_url = urlencode(strtolower($row['assign_group']));
+                $d_notes = htmlspecialchars($row['notes']);
+                $d_id = htmlspecialchars($row['id']);
+                
+                // Make URLs in notes clickable
+                $urlregex = '~(?:(https?)://([^\s<]+)|(www\.[^\s<]+?\.[^\s<]+))(?<![\.,:])~i';
+                $d_notes = preg_replace($urlregex, '<a href="$0" target="_blank" title="$0">$0</a>', $d_notes);
+
+                // Build HTML row
+                echo "<tr>";
+                echo "<td class=\"small\"><a href=\"viewentry.php?id={$d_id}\" target=\"_blank\">{$d_keyword}</a></td>";
+                echo "<td class=\"small\">{$d_category}</td>";
+                echo "<td class=\"small\"><a href=\"viewgroup.php?name={$d_assigngroup_url}\" target=\"_blank\">{$d_assigngroup}</a></td>";
+                echo "<td class=\"small\">{$d_notes}</td>";
+                echo "</tr>";
+            }
+        } else if ($page === 1) { // Only show "No results" on the first page
+            echo '<tr><td colspan="4"><span class="label label-danger">No Matching Results Found</span></td></tr>';
+        }
+        // If it's not page 1 and there are no results, we just return nothing, signaling the end of the data.
+
+        $stmt->close();
+    } else if ($page === 1) { // Failsafe for invalid queries on first page
+        echo '<tr><td colspan="4"><span class="label label-info">Invalid search query.</span></td></tr>';
+    }
 }
+$test_db->close();
 ?>

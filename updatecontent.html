@@ -278,12 +278,6 @@
 		}
 	</style>
 
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
-
 </head>
 
 <body>
@@ -298,7 +292,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="index.html">
         <img src="assets/orangeLOGO.png" alt="Assignment Group Locator" />
       </a>
     </div>
@@ -325,107 +319,98 @@
 				<h1 class="page-title">Add New Database Entry</h1>
 				<p class="page-subtitle">Use this form to add a new entry to the AG Locator database.</p>
 			</div>
-
-			<div class="row">
-				<div class="col-xs-12">
-					<div class="form-section">
-						<form name="insert" action="php/insert.php" method="post">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="form-label">Author Email Address:</label>
-										<input type="email" name="new_authoremail" class="form-input" required>
-										<div class="form-note">NOTE: To perform future updates to this entry, access to the provided email address will be required.</div>
-									</div>
-
-									<div class="form-group">
-										<label class="form-label">Entry Keyword / Product:</label>
-										<input type="text" name="entry_keyword" class="form-input" required>
-									</div>
-
-									<div class="form-group">
-										<label class="form-label" for="entry_category">Support Category</label>
-										<select name="entry_category" id="entry_category" class="form-select">
-											<option value="" selected>None (default)</option>
-											<option value="Installation">Installation</option>
-											<option value="Configuration">Configuration</option>
-											<option value="Performance">Performance</option>
-											<option value="Usage">Usage</option>
-										</select>
-										<p class="form-note">Select the primary support category for this entry.</p>
-									</div>
-
-									<div class="form-group">
-										<label class="form-label">Entry Subcategory:</label>
-										<select name="entry_subcat" class="form-select">
-											<option value="" selected>None (default)</option>
-											<option value="Download">Download</option>
-											<option value="Maintenance">Maintenance</option>
-											<option value="Requirements">Requirements</option>
-											<option value="Plan File">Plan File</option>
-											<option value="License">License</option>
-											<option value="Database">Database</option>
-											<option value="Language">Language</option>
-											<option value="Java">Java</option>
-											<option value="Third Party">Third Party</option>
-											<option value="Post-Install">Post-Install</option>
-											<option value="Error">Error</option>
-											<option value="Other">Other</option>
-										</select>
-									</div>
-
-									<div class="form-group">
-										<label class="form-label">Assignment Group:</label>
-										<input type="text" name="assign_group" class="form-input" required>
-									</div>
-								</div>
-
-								<div class="col-md-6">
-									<div class="form-group">
-										<label class="form-label" for="entry_special">Entry has Special Handling Procedures?</label>
-										<div class="radio-group">
-											<div class="radio-option">
-												<input type="radio" id="special_yes" name="entry_special" value="Yes" required>
-												<label for="special_yes">Yes</label>
-											</div>
-											<div class="radio-option">
-												<input type="radio" id="special_no" name="entry_special" value="No" checked required>
-												<label for="special_no">No</label>
-											</div>
-										</div>
-										<p class="form-note">Select 'Yes' if this entry requires special handling that support should be aware of.</p>
-									</div>
-								</div>
+			
+			<div class="form-section">
+				<form name="insert" action="php/insert.php" method="post">
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="form-label">Author Email Address:</label>
+								<input type="email" name="new_authoremail" class="form-input" required>
+								<div class="form-note">NOTE: To perform future updates to this entry, access to the provided email address will be required.</div>
 							</div>
 
 							<div class="form-group">
-								<label class="form-label" for="notes">Additional Notes</label>
-								<textarea class="form-textarea" name="notes" id="notes" maxlength="4000" placeholder="Include any extra details, links, or context here..."></textarea>
+								<label class="form-label">Entry Keyword / Product:</label>
+								<input type="text" name="entry_keyword" class="form-input" required>
 							</div>
 
-							<div style="text-align: center; margin-top: 30px;">
-								<button type="submit" class="btn-submit">
-									<i class="fa fa-plus-circle"></i> Add Entry to Database
-								</button>
+							<div class="form-group">
+								<label class="form-label" for="entry_category">Support Category</label>
+								<select name="entry_category" id="entry_category" class="form-select">
+									<option value="" selected>None (default)</option>
+									<option value="Installation">Installation</option>
+									<option value="Configuration">Configuration</option>
+									<option value="Performance">Performance</option>
+									<option value="Usage">Usage</option>
+								</select>
+								<p class="form-note">Select the primary support category for this entry.</p>
 							</div>
-						</form>
+
+							<div class="form-group">
+								<label class="form-label">Entry Subcategory:</label>
+								<select name="entry_subcat" class="form-select">
+									<option value="" selected>None (default)</option>
+									<option value="Download">Download</option>
+									<option value="Maintenance">Maintenance</option>
+									<option value="Requirements">Requirements</option>
+									<option value="Plan File">Plan File</option>
+									<option value="License">License</option>
+									<option value="Database">Database</option>
+									<option value="Language">Language</option>
+									<option value="Java">Java</option>
+									<option value="Third Party">Third Party</option>
+									<option value="Post-Install">Post-Install</option>
+									<option value="Error">Error</option>
+									<option value="Other">Other</option>
+								</select>
+							</div>
+
+							<div class="form-group">
+								<label class="form-label">Assignment Group:</label>
+								<input type="text" name="assign_group" class="form-input" required>
+							</div>
+						</div>
+
+						<div class="col-md-6">
+							<div class="form-group">
+								<label class="form-label" for="entry_special">Entry has Special Handling Procedures?</label>
+								<div class="radio-group">
+									<div class="radio-option">
+										<input type="radio" id="special_yes" name="entry_special" value="Yes" required>
+										<label for="special_yes">Yes</label>
+									</div>
+									<div class="radio-option">
+										<input type="radio" id="special_no" name="entry_special" value="No" checked required>
+										<label for="special_no">No</label>
+									</div>
+								</div>
+								<p class="form-note">Select 'Yes' if this entry requires special handling that support should be aware of.</p>
+							</div>
+						</div>
 					</div>
-				</div>
+
+					<div class="form-group">
+						<label class="form-label" for="notes">Additional Notes</label>
+						<textarea class="form-textarea" name="notes" id="notes" maxlength="4000" placeholder="Include any extra details, links, or context here..."></textarea>
+					</div>
+
+					<div style="text-align: center; margin-top: 30px;">
+						<button type="submit" class="btn-submit">
+							<i class="fa fa-plus-circle"></i> Add Entry to Database
+						</button>
+					</div>
+				</form>
 			</div>
 
 		</section>
-		<!-- /wrapper -->
-	</section><!-- /MAIN CONTENT -->
-	<!--main content end-->
+	</section>
 </section>
 
 <!-- place JS scripts at end of page for faster load times -->
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 <script src="assets/js/bootstrap.min.js"></script>
 <script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
-
-<!--script for this page-->
-<script type="text/javascript" src="scripts/triggers.js"></script>
 
 </body>
 </html>

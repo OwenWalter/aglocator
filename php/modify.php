@@ -1,83 +1,106 @@
 <?php
-//require_once '/path/to/database/configfile/db.php';    //Refer to db.php-example
 require_once 'db.php';
-//require_once '/path/to/file/containing/secrets/authorkey-salts.php';    //Refer to authorkey-salts.php-example
 require_once 'authorkey-salts.php';
 
-$submitbutton = mysqli_real_escape_string($test_db, $_POST['submit']); //will either be "Save Modified Entry" or "Delete Entry From Database"
-$id = mysqli_real_escape_string($test_db, $_POST['id']);
-$authorkey = mysqli_real_escape_string($test_db, $_POST['authorkey']);
-$entry_keyword = mysqli_real_escape_string($test_db, $_POST['entry_keyword']);
-$entry_category = mysqli_real_escape_string($test_db, $_POST['entry_category']);
-$entry_subcat = mysqli_real_escape_string($test_db, $_POST['entry_subcat']);
-$entry_special = mysqli_real_escape_string($test_db, $_POST['entry_special']);
-$assign_group = mysqli_real_escape_string($test_db, $_POST['assign_group']);
-$notes = mysqli_real_escape_string($test_db, $_POST['notes']);
-$pri_consult = mysqli_real_escape_string($test_db, $_POST['pri_consult']);
-$bak_consult = mysqli_real_escape_string($test_db, $_POST['bak_consult']);
-$manager = mysqli_real_escape_string($test_db, $_POST['manager']);
-$updated_authoremail = mysqli_real_escape_string($test_db, $_POST['updated_authoremail']);
-
-if (strlen(trim($entry_keyword))<=0 || strlen(trim($entry_special))<=0 || strlen(trim($assign_group))<=0 || strlen(trim($updated_authoremail))<=0 || strlen(trim($authorkey))<=0 || strlen(trim($id))<=0 ) {//verify required user-input fields have more than just whitespace characters
-
-echo "Error: Invalid input detected. <br><br> Keyword, Assignment Group, and Author Email address cannot be blank or contain only whitespace characters. The author key is always required. <br> Please press the back button and edit the entry to contain proper input.";
-
+// Fetches the original author's email for a given entry ID.
+function get_original_author_email($db, $entry_id) {
+    $stmt = $db->prepare("SELECT author_email FROM live_table WHERE id = ?");
+    $stmt->bind_param("i", $entry_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        return $result->fetch_assoc()['author_email'];
+    }
+    return null;
 }
 
-else {
-	//Pull the author email for the selected entry ID from the database, didn't pass the version provided by user via HTML POST due to manual-edit/injection risk
-	//Would be nice to not have to query the DB again but this seems like the most secure method
-        $query = "SELECT author_email FROM live_table WHERE id = '".$id."';";
-        //echo $query; //DEBUG
-        $result = $test_db->query($query);
-        while($results = $result->fetch_array()) {
-                $result_array[] = $results;
-        }
-        // Check for and display results
-        if (isset($result_array)) {
-                foreach ($result_array as $result) {
-                // Output strings and highlight the matches
-                 $d_authoremail = htmlspecialchars($result['author_email']);
-		}
-	}
+// Validates the provided author key against the original author's email.
+function is_author_key_valid($original_email, $provided_key) {
+    global $Sugar, $Spice, $EverythingNice;
+    $parsley = $Sugar . $original_email . $Spice;
+    $sage = hash('sha256', $parsley);
+    $rosemary = $sage . $EverythingNice;
+    $thyme = hash('crc32', $rosemary);
+    return $provided_key === $thyme;
+}
 
-	//Determine the author's unique keycode based on their email.
-        //Values for $Sugar, $Spice, and $EverythingNice come from authorkey-salts.php file (loaded at the top of this program)
+// Stop execution with an error message.
+function fail_with_error($message) {
+    exit("Error: " . $message);
+}
 
-        $parsley = $Sugar . $d_authoremail . $Spice;
-        $sage = hash('sha256', $parsley);
-        $rosemary = $sage . $EverythingNice;
-        $thyme = hash('crc32', $rosemary);
+// --- Main Logic ---
 
-	if ($authorkey == $thyme && "$submitbutton" == 'Save Modified Entry') {
-		//do update
-		$sql = "UPDATE live_table
-			SET entry_keyword = '$entry_keyword', entry_category= '$entry_category', entry_subcategory= '$entry_subcat', entry_special= '$entry_special', assign_group = '$assign_group', notes = '$notes', pri_consult = '$pri_consult', bak_consult = '$bak_consult', manager = '$manager', author_email = '$updated_authoremail', updt_time = NOW()
-			WHERE id = '$id'";
-		if (mysqli_query($test_db, $sql)) {
-		    header("Location: ../success-mod.html");
-	}
-	}
-	elseif ($authorkey == $thyme && "$submitbutton" == 'Delete Entry From Database') {
-		//do delete
-               $sql = "DELETE FROM live_table
-                        WHERE id = '$id'";
-                if (mysqli_query($test_db, $sql)) {
-                   header("Location: ../success-del.html");
-	}
-	}
-	 else { //report userkey incorrect
-		
-		//echo "SQL Error: " . $sql . "<br>" . mysqli_error($test_db); //use to debug sql
-		//echo "Entered Key: $authorkey"; //DEBUG ONLY
-		//echo "Calculated Key: $thyme"; // DEBUG ONLY
-		//echo $submitbutton; // DEBUG ONLY
-	      echo "The provided author key is incorrect for this signature.";
+$entry_id = isset($_POST['entry_id']) ? (int)$_POST['entry_id'] : 0;
+$author_email = isset($_POST['author_email']) ? trim($_POST['author_email']) : '';
 
-	}
+if ($entry_id <= 0 || empty($author_email)) {
+    fail_with_error("Invalid entry data provided.");
+}
 
-	} 
+// For both update and delete, we need the original author's email to validate the key.
+// Note: The form on modifycontent.php should ask for the key, not the email again.
+// This example assumes a key is passed. If not, the is_author_key_valid needs the user-entered key.
+// Let's assume the key is passed from a field named 'author_key'.
+$author_key = isset($_POST['author_key']) ? trim($_POST['author_key']) : '';
+if (empty($author_key)) {
+	// This part needs a form field in modifycontent.php named 'author_key'
+    fail_with_error("Author key is required to modify or delete an entry.");
+}
 
-mysqli_close($test_db);
 
+$original_author_email = get_original_author_email($test_db, $entry_id);
+
+if (!$original_author_email || !is_author_key_valid($original_author_email, $author_key)) {
+    fail_with_error("The provided author key is incorrect for this entry.");
+}
+
+// Handle DELETE request
+if (isset($_POST['delete'])) {
+    $stmt = $test_db->prepare("DELETE FROM live_table WHERE id = ?");
+    $stmt->bind_param("i", $entry_id);
+    if ($stmt->execute()) {
+        header("Location: ../success-del.html");
+    } else {
+        fail_with_error("Could not delete the entry.");
+    }
+    $stmt->close();
+    $test_db->close();
+    exit();
+}
+
+// Handle UPDATE request
+if (isset($_POST['update'])) {
+    $entry_keyword = isset($_POST['entry_keyword']) ? trim($_POST['entry_keyword']) : '';
+    $assign_group = isset($_POST['assign_group']) ? trim($_POST['assign_group']) : '';
+
+    if (empty($entry_keyword) || empty($assign_group)) {
+        fail_with_error("Keyword and Assignment Group fields cannot be blank.");
+    }
+
+    $sql = "UPDATE live_table SET 
+                entry_keyword = ?, entry_category = ?, assign_group = ?, 
+                notes = ?, author_email = ?, updt_time = NOW()
+            WHERE id = ?";
+    
+    $stmt = $test_db->prepare($sql);
+    $stmt->bind_param(
+        "sssssi",
+        $entry_keyword,
+        $_POST['entry_category'] ?? '',
+        $assign_group,
+        $_POST['notes'] ?? '',
+        $author_email, // The email can be updated
+        $entry_id
+    );
+
+    if ($stmt->execute()) {
+        header("Location: ../success-mod.html");
+    } else {
+        fail_with_error("Could not update the entry: " . $stmt->error);
+    }
+    $stmt->close();
+}
+
+$test_db->close();
 ?>

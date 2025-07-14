@@ -151,54 +151,50 @@
 
 <body>
 <?php
-// DB connection
 require_once 'php/db.php';
 
-// Get group name from URL and sanitize it
 $group_name_from_url = isset($_GET['name']) ? $_GET['name'] : '';
-
-// The name in the URL is lowercased and urlencoded. We need to decode it.
-// We will query the database case-insensitively, so we don't need the original case.
-$group_name = $test_db->real_escape_string(urldecode($group_name_from_url));
+$group_name_decoded = urldecode($group_name_from_url);
 
 $description = "No description has been added for this group yet.";
 $display_group_name = "Invalid Group";
 
-if (!empty($group_name)) {
-    // We need to get the correctly cased group name from the main data table (live_table)
-    // and the description from the new table (assignment_group_descriptions)
-    
-    // Query to get the canonical group name
-    $name_query = 'SELECT assign_group FROM live_table WHERE LOWER(assign_group) = "'.$group_name.'" LIMIT 1';
-    $name_result = $test_db->query($name_query);
-    
-    if ($name_result && $name_result->num_rows > 0) {
-        $name_row = $name_result->fetch_assoc();
-        $display_group_name = htmlspecialchars($name_row['assign_group']);
-        
-        // Now query for the description using the canonical name
-        $desc_query = 'SELECT description FROM assignment_group_descriptions WHERE group_name = "'.$test_db->real_escape_string($name_row['assign_group']).'"';
-        $desc_result = $test_db->query($desc_query);
+if (!empty($group_name_decoded)) {
+    // First, get the canonical (correctly cased) group name from the live_table
+    $stmt1 = $test_db->prepare("SELECT assign_group FROM live_table WHERE LOWER(assign_group) = ? LIMIT 1");
+    $stmt1->bind_param("s", $group_name_decoded);
+    $stmt1->execute();
+    $result1 = $stmt1->get_result();
 
-        if ($desc_result && $desc_result->num_rows > 0) {
-            $desc_row = $desc_result->fetch_assoc();
-            // Check if description is not empty
-            if (!empty($desc_row['description'])) {
-                $description = nl2br(htmlspecialchars($desc_row['description']));
+    if ($result1->num_rows > 0) {
+        $row1 = $result1->fetch_assoc();
+        $canonical_group_name = $row1['assign_group'];
+        $display_group_name = htmlspecialchars($canonical_group_name);
+
+        // Now, get the description for that canonical name
+        $stmt2 = $test_db->prepare("SELECT description FROM assignment_group_descriptions WHERE group_name = ?");
+        $stmt2->bind_param("s", $canonical_group_name);
+        $stmt2->execute();
+        $result2 = $stmt2->get_result();
+
+        if ($result2->num_rows > 0) {
+            $row2 = $result2->fetch_assoc();
+            if (!empty($row2['description'])) {
+                $description = nl2br(htmlspecialchars($row2['description']));
             }
         }
+		$stmt2->close();
     } else {
-        // Fallback if the group name isn't in live_table for some reason
-        $display_group_name = htmlspecialchars(strtoupper($group_name));
+        $display_group_name = htmlspecialchars(strtoupper($group_name_decoded));
     }
+    $stmt1->close();
 } else {
     $display_group_name = "No Group Specified";
 }
-
+$test_db->close();
 ?>
 <nav class="navbar navbar-default">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
@@ -302,7 +298,6 @@ if (!empty($group_name)) {
 $(document).ready(function() {
     $('#submit-password').on('click', function() {
         var password = $('#password').val();
-        // Simple password check. A real application should use a more secure method.
         if (password === 'SAS') {
             $('#password-step').hide();
             $('#edit-step').show();
@@ -327,11 +322,10 @@ $(document).ready(function() {
                 group_name: groupName,
                 description: newDescription
             },
-            dataType: 'json', // Expect a JSON response
-            success: function(res) { // 'res' is now automatically a JavaScript object
+            dataType: 'json',
+            success: function(res) {
                 if (res.success) {
                     statusDiv.html('<span class="text-success">Description updated successfully!</span>');
-                    // Refresh the page to show the new description after a short delay
                     setTimeout(function() {
                         location.reload();
                     }, 1000);
