@@ -117,7 +117,7 @@
 		}
 
 		#main-content {
-			padding: 40px 20px;
+			padding: 15px; /* Reduced top padding */
 		}
 
 		/* Content panel styling */

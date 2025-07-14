@@ -9,7 +9,7 @@ error_log("Search.php called with POST data: " . print_r($_POST, true));
 $html = '<tr>';
 $html .= '<td class="small"><a href="viewentry.php?id=idString" target="_blank">keywordString</a></td>';
 $html .= '<td class="small">categoryString</td>';
-$html .= '<td class="small">assigngroupString</td>';
+$html .= '<td class="small"><a href="viewgroup.php?name=groupNameString" target="_blank">assigngroupString</a></td>';
 $html .= '<td class="small">notesString</td>';
 $html .= '</tr>';
 
@@ -101,6 +101,7 @@ if (strlen($search_string) > 1 && $search_string !== ' ') {
                  $d_category = htmlspecialchars($result['entry_category']);
                  $d_subcat = htmlspecialchars($result['entry_subcategory']);
 		 $d_assigngroup = htmlspecialchars($result['assign_group']);
+		 $d_assigngroup_url = urlencode(strtolower($result['assign_group']));
 		 $d_notes = htmlspecialchars($result['notes']);
 		 $d_id = htmlspecialchars($result['id']);
 			//make url clickable
@@ -110,6 +111,7 @@ if (strlen($search_string) > 1 && $search_string !== ' ') {
 		$o = str_replace('keywordString', $d_keyword, $html);
                 $o = str_replace('categoryString', $d_category, $o);
                 $o = str_replace('assigngroupString', $d_assigngroup, $o);
+		$o = str_replace('groupNameString', $d_assigngroup_url, $o);
 		$o = str_replace('notesString', $d_notes, $o);
 		$o = str_replace('idString', $d_id, $o);
 		// Output it

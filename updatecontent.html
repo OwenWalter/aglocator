@@ -123,28 +123,29 @@
 		}
 
 		#main-content {
-			padding: 20px 20px 40px 20px;
+			padding: 15px; /* Reduced top padding */
 		}
 
 		/* Page title styling */
 		.page-header {
 			background: transparent;
-			padding: 25px 35px 15px 35px;
-			margin-bottom: 25px;
-			text-align: center;
+			padding: 0;
+			margin: 0 0 20px 0; /* Reduced padding and margin */
+			text-align: left;
 		}
 
 		.page-title {
-			font-size: 28px;
-			font-weight: 700;
-			color: var(--sas-blue);
-			margin-bottom: 10px;
+			font-size: 24px; /* Smaller header */
+			font-weight: 600;
+			color: var(--sas-blue-dark);
+			margin: 0;
 		}
 
 		.page-subtitle {
-			font-size: 16px;
+			font-size: 15px; /* Adjusted size */
 			color: var(--sas-gray);
 			font-weight: 400;
+			margin-top: 5px;
 		}
 
 		/* Modern form styling */
@@ -310,15 +311,6 @@
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="help.html">Help</a></li>
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Other Projects <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="http://toothless.unx.sas.com/sslazy/" target="_blank">SS LAZY Signature Database</a></li>
-            <li><a href="http://toothless.unx.sas.com/goats/" target="_blank">GOATS Task Snippets Reference</a></li>
-            <li role="separator" class="divider"></li>
-            <li><a href="http://toothless.unx.sas.com/fts-clock.html" target="_blank">Follow the Sun Clock</a></li>
-          </ul>
-        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->
@@ -329,90 +321,93 @@
 	<section id="main-content" style="margin-left: 0px;">
 		<section class="wrapper">
 
-			<div class="row">
-				<div class="col-xs-12">
-					<div class="page-header">
-						<h1 class="page-title">Add New Entry</h1>
-						<p class="page-subtitle">Add a new entry to the AG Locator database using this form</p>
-					</div>
-				</div>
+			<div class="page-header">
+				<h1 class="page-title">Add New Database Entry</h1>
+				<p class="page-subtitle">Use this form to add a new entry to the AG Locator database.</p>
 			</div>
 
 			<div class="row">
 				<div class="col-xs-12">
 					<div class="form-section">
-						<form action="php/insert.php" method="post">
-							
-							<div class="form-group">
-								<label class="form-label">Author Email Address:</label>
-								<input type="email" name="new_authoremail" class="form-input" required>
-								<div class="form-note">NOTE: To perform future updates to this entry, access to the provided email address will be required.</div>
-							</div>
-
-							<div class="form-group">
-								<label class="form-label">Entry Keyword / Product:</label>
-								<input type="text" name="entry_keyword" class="form-input" required>
-							</div>
-
-							<div class="form-group">
-								<label class="form-label">Entry Category:</label>
-								<select name="entry_category" class="form-select">
-									<option value="" selected>None (default)</option>
-									<option value="Installation">Installation</option>
-									<option value="Configuration">Configuration</option>
-									<option value="Performance">Performance</option>
-									<option value="Documentation">Documentation</option>
-									<option value="Security">Security</option>
-								</select>
-							</div>
-
-							<div class="form-group">
-								<label class="form-label">Entry Subcategory:</label>
-								<select name="entry_subcat" class="form-select">
-									<option value="" selected>None (default)</option>
-									<option value="Download">Download</option>
-									<option value="Maintenance">Maintenance</option>
-									<option value="Requirements">Requirements</option>
-									<option value="Plan File">Plan File</option>
-									<option value="License">License</option>
-									<option value="Database">Database</option>
-									<option value="Language">Language</option>
-									<option value="Java">Java</option>
-									<option value="Third Party">Third Party</option>
-									<option value="Post-Install">Post-Install</option>
-									<option value="Error">Error</option>
-									<option value="Other">Other</option>
-								</select>
-							</div>
-
-							<div class="form-group">
-								<label class="form-label">Entry has Special Handling Procedures:</label>
-								<div class="radio-group">
-									<div class="radio-option">
-										<input type="radio" id="specialhandlingtrue" name="entry_special" value="1" />
-										<label for="specialhandlingtrue">Yes</label>
+						<form name="insert" action="php/insert.php" method="post">
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="form-label">Author Email Address:</label>
+										<input type="email" name="new_authoremail" class="form-input" required>
+										<div class="form-note">NOTE: To perform future updates to this entry, access to the provided email address will be required.</div>
 									</div>
-									<div class="radio-option">
-										<input type="radio" id="specialhandlingfalse" name="entry_special" value="0" checked />
-										<label for="specialhandlingfalse">No</label>
+
+									<div class="form-group">
+										<label class="form-label">Entry Keyword / Product:</label>
+										<input type="text" name="entry_keyword" class="form-input" required>
+									</div>
+
+									<div class="form-group">
+										<label class="form-label">Entry Category:</label>
+										<select name="entry_category" class="form-select">
+											<option value="" selected>None (default)</option>
+											<option value="Installation">Installation</option>
+											<option value="Configuration">Configuration</option>
+											<option value="Performance">Performance</option>
+											<option value="Documentation">Documentation</option>
+											<option value="Security">Security</option>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label class="form-label">Entry Subcategory:</label>
+										<select name="entry_subcat" class="form-select">
+											<option value="" selected>None (default)</option>
+											<option value="Download">Download</option>
+											<option value="Maintenance">Maintenance</option>
+											<option value="Requirements">Requirements</option>
+											<option value="Plan File">Plan File</option>
+											<option value="License">License</option>
+											<option value="Database">Database</option>
+											<option value="Language">Language</option>
+											<option value="Java">Java</option>
+											<option value="Third Party">Third Party</option>
+											<option value="Post-Install">Post-Install</option>
+											<option value="Error">Error</option>
+											<option value="Other">Other</option>
+										</select>
+									</div>
+
+									<div class="form-group">
+										<label class="form-label">Assignment Group:</label>
+										<input type="text" name="assign_group" class="form-input" required>
+									</div>
+								</div>
+
+								<div class="col-md-6">
+									<div class="form-group">
+										<label class="form-label" for="entry_special">Entry has Special Handling Procedures?</label>
+										<div class="radio-group">
+											<div class="radio-option">
+												<input type="radio" id="special_yes" name="entry_special" value="Yes" required>
+												<label for="special_yes">Yes</label>
+											</div>
+											<div class="radio-option">
+												<input type="radio" id="special_no" name="entry_special" value="No" checked required>
+												<label for="special_no">No</label>
+											</div>
+										</div>
+										<p class="form-note">Select 'Yes' if this entry requires special handling that support should be aware of.</p>
 									</div>
 								</div>
 							</div>
 
 							<div class="form-group">
-								<label class="form-label">Assignment Group:</label>
-								<input type="text" name="assign_group" class="form-input" required>
+								<label class="form-label" for="notes">Additional Notes</label>
+								<textarea class="form-textarea" name="notes" id="notes" maxlength="4000" placeholder="Include any extra details, links, or context here..."></textarea>
 							</div>
 
-							<div class="form-group">
-								<label class="form-label">Additional Notes:</label>
-								<textarea name="notes" class="form-textarea" maxlength="4000" placeholder="Enter any additional information, special procedures, or notes about this entry..."></textarea>
+							<div style="text-align: center; margin-top: 30px;">
+								<button type="submit" class="btn-submit">
+									<i class="fa fa-plus-circle"></i> Add Entry to Database
+								</button>
 							</div>
-
-							<div class="form-group">
-								<button type="submit" class="btn-submit">Submit Entry</button>
-							</div>
-
 						</form>
 					</div>
 				</div>

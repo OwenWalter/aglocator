@@ -21,13 +21,12 @@
 	<link href="assets/css/table-responsive.css" rel="stylesheet">
 	<link href="assets/css/custom.css" rel="stylesheet">
 	
-	<!-- Modern styling to match index.html -->
+	<!-- Modern styling for this page -->
 	<style>
 		/* SAS Blue Color Palette */
 		:root {
 			--sas-blue: #0074D9;
 			--sas-blue-dark: #005bb5;
-			--sas-blue-light: #4da3e0;
 			--sas-gray-light: #f8f9fa;
 			--sas-gray: #6c757d;
 			--sas-border: #e9ecef;
@@ -51,27 +50,16 @@
 			overflow: hidden;
 		}
 
-		.navbar-default::before {
+		.navbar-default::before, .navbar-default::after {
 			content: '';
 			position: absolute;
 			top: -50%;
-			right: -10%;
-			width: 100px;
-			height: 200%;
 			background: rgba(255,255,255,0.05);
 			transform: rotate(15deg);
-		}
-
-		.navbar-default::after {
-			content: '';
-			position: absolute;
-			top: -50%;
-			right: -5%;
-			width: 60px;
 			height: 200%;
-			background: rgba(255,255,255,0.03);
-			transform: rotate(15deg);
 		}
+		.navbar-default::before { right: -10%; width: 100px; }
+		.navbar-default::after { right: -5%; width: 60px; background: rgba(255,255,255,0.03); }
 
 		.navbar-brand {
 			padding: 10px 20px;
@@ -99,119 +87,122 @@
 		}
 
 		.navbar-nav > li > a:hover,
-		.navbar-nav > li > a:focus {
+		.navbar-nav > li > a:focus,
+		.navbar-nav > .active > a {
 			color: white !important;
 			background: rgba(255,255,255,0.15) !important;
 			border-radius: 6px;
 		}
 
-		.navbar-nav > .active > a {
-			background: rgba(255,255,255,0.2) !important;
-			border-radius: 6px;
-		}
-
 		/* Main content area */
-		#container {
-			background: white;
-			min-height: 100vh;
-		}
-
-		#main-content {
-			padding: 40px 20px;
-		}
+		#container { background: white; }
+		#main-content { padding: 15px; }
 
 		/* Entry details styling */
-		.wrapper {
+		.entry-wrapper {
 			background: white;
-			padding: 30px;
 			border-radius: 12px;
-			box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-			margin: 20px 0;
+			box-shadow: 0 6px 24px rgba(0,0,0,0.07);
+			border: 1px solid var(--sas-border);
 		}
 
-		.wrapper h3 {
-			color: var(--sas-blue-dark);
+		.entry-header {
+			padding: 20px 25px;
+			border-bottom: 1px solid var(--sas-border);
+		}
+		
+		.entry-keyword {
+			font-size: 24px;
 			font-weight: 600;
+			color: var(--sas-blue-dark);
+			margin: 0 0 5px 0;
+		}
+
+		.entry-category {
+			font-size: 16px;
+			font-weight: 500;
+			color: var(--sas-gray);
+		}
+
+		.entry-body {
+			padding: 25px;
+		}
+
+		.assignment-group-section {
+			text-align: center;
+			background: linear-gradient(135deg, var(--sas-blue) 0%, var(--sas-blue-dark) 100%);
+			color: white;
+			padding: 25px;
+			border-radius: 8px;
+			margin-bottom: 25px;
+		}
+
+		.assignment-group-section .label {
+			font-size: 14px;
+			font-weight: 500;
+			opacity: 0.8;
+			margin-bottom: 8px;
+			display: block;
+		}
+		
+		.assignment-group-section .group-name {
+			font-size: 28px;
+			font-weight: 700;
+			letter-spacing: 0.5px;
+		}
+
+		.notes-section .label {
+			font-size: 16px;
+			font-weight: 600;
+			color: var(--sas-blue-dark);
 			margin-bottom: 10px;
 		}
 
-		.wrapper h4 {
-			color: var(--sas-blue);
-			font-weight: 500;
-			margin-bottom: 8px;
-		}
-
-		.wrapper p {
-			color: #555;
-			font-weight: 500;
-			margin-bottom: 5px;
-		}
-
-		.wrapper pre {
+		.notes-section pre {
 			background: var(--sas-gray-light);
 			border: 1px solid var(--sas-border);
 			border-radius: 8px;
 			padding: 20px;
-			font-family: 'Roboto', monospace;
+			font-size: 15px;
+			line-height: 1.7;
 			color: #333;
-			max-height: none !important;
 			white-space: pre-wrap;
 			word-wrap: break-word;
+			max-height: none !important;
+		}
+		
+		.entry-footer {
+			padding: 20px 25px;
+			background: var(--sas-gray-light);
+			border-top: 1px solid var(--sas-border);
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			border-bottom-left-radius: 12px;
+			border-bottom-right-radius: 12px;
 		}
 
-		.wrapper a {
-			color: var(--sas-blue);
-			text-decoration: none;
-			font-weight: 500;
-			padding: 8px 16px;
-			background: var(--sas-gray-light);
-			border-radius: 6px;
-			border: 1px solid var(--sas-border);
-			display: inline-block;
-			margin-top: 20px;
+		.entry-meta {
+			font-size: 13px;
+			color: var(--sas-gray);
+		}
+
+		.btn-modify-entry {
+			background: var(--sas-blue);
+			color: white;
+			border: none;
+			padding: 10px 20px;
+			border-radius: 8px;
+			font-weight: 600;
+			text-decoration: none !important;
 			transition: all 0.3s ease;
 		}
 
-		.wrapper a:hover {
-			background: var(--sas-blue);
-			color: white;
-			text-decoration: none;
-			transform: translateY(-1px);
+		.btn-modify-entry:hover {
+			background: var(--sas-blue-dark);
+			transform: translateY(-2px);
 			box-shadow: 0 4px 12px rgba(0,116,217,0.2);
-		}
-
-		/* Float styling */
-		.goleftfloat {
-			float: left;
-			width: 70%;
-		}
-
-		.gorightfloat {
-			float: right;
-			width: 25%;
-			text-align: right;
-		}
-
-		/* Mobile responsive */
-		@media (max-width: 768px) {
-			.navbar-brand img {
-				height: 40px;
-				max-width: 250px;
-			}
-
-			#main-content {
-				padding: 20px 15px;
-			}
-
-			.wrapper {
-				padding: 20px;
-			}
-
-			.goleftfloat, .gorightfloat {
-				float: none;
-				width: 100%;
-				text-align: left;
-			}
+			color: white;
 		}
 	</style>
 
@@ -244,7 +235,7 @@
       <ul class="nav navbar-nav">
         <li><a href="index.html">Search</a></li>
         <li><a href="updatecontent.html">Add New Entry</a></li>
-	<li class="active"><a>Viewing Details<span class="sr-only">(current)</span></a></li>
+		<li class="active"><a>Viewing Details<span class="sr-only">(current)</span></a></li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
         <li><a href="help.html">Help</a></li>
@@ -253,15 +244,11 @@
   </div><!-- /.container-fluid -->
 </nav>
 
-
-		<section id="container" >
-
-			<!--main content start-->
-			<section id="main-content" style="margin-left: 0px;">
-				<section class="wrapper">
-
-<!-- All the meat of the view entry page is in this embedded PHP for simplicity of passing input ID vars -->
-
+<section id="container" >
+	<section id="main-content" style="margin-left: 0px;">
+		<section class="wrapper">
+			<div class="row">
+				<div class="col-lg-10 col-lg-offset-1">
 <?php
 //require_once '/path/to/database/configfile/db.php';    //Refer to db.php-example
 require_once 'php/db.php';
@@ -269,89 +256,80 @@ require_once 'php/db.php';
 // Get the ID for the selected entry
 $entryID = htmlspecialchars($_GET["id"]);
 
-// Output HTML line-by-line, header info becomes multiple "lines" in a single span due to CSS float handling
-//$html = '<span class=goleftfloat><h3><b><i>keywordString</i></b></h3><h4><b><i>categoryString</b></i></h4><h4><b><i>subcatString</b></i></h4><br><br><p>Assignment Group:</p><h3><b><i>assigngroupString</b></i></h3><br><br><h5>Primary Consultant: <b>priconsultString</b></h5><h5>Backup Consultant: <b>bakconsultString</b></h5><h5>Team Manager: <b>managerString</b></h5></span>'; //display consultants and manager
-$html = '<span class=goleftfloat><p>Entry Keyword / Product:</p><h3><b><i>keywordString</i></b></h3><p>Category:</p><h4><b><i>categoryString</b></i></h4><p>Subcategory:</p><h4><b><i>subcatString</b></i></h4><br><br><p>Assignment Group:</p><h3><b><i>assigngroupString</b></i></h3></span>'; //do not display consultants and manager
-$html .= '<span class=gorightfloat><p>Entry Created: <b>smittimeString</b></p><p>Entry Modified: <b>updttimeString</b></p></span>';
-$html .= '<div style="clear:both;"></div><br>';
-$html .= '<p>Additional Notes:</p>';
-$html .= '<pre>notesString</pre>';
-$html .= '<p><a href="modifycontent.php?id=' . $entryID . '">Modify This Entry</a></p>';
+// Query
+$query = "SELECT * FROM live_table WHERE id = '".$entryID."'";
 
-        // Query
-        $query = "SELECT * FROM live_table WHERE id = '".$entryID."'";
+// Do the query
+$result = $test_db->query($query);
+$entry_data = $result->fetch_assoc();
 
-        // Do the query, probably does more than necessary for the simple ID select, but it is safe
-        $result = $test_db->query($query);
-        while($results = $result->fetch_array()) {
-                $result_array[] = $results;
-        }
+// Check for results and display
+if ($entry_data) {
+	$d_keyword = htmlspecialchars($entry_data['entry_keyword']);
+	$d_category = htmlspecialchars($entry_data['entry_category']);
+	$d_subcat = htmlspecialchars($entry_data['entry_subcategory']);
+	$d_assigngroup = htmlspecialchars($entry_data['assign_group']);
+	$d_notes = htmlspecialchars($entry_data['notes']);
+	$d_smittime = htmlspecialchars($entry_data['smit_time']);
+	$d_updttime = htmlspecialchars($entry_data['updt_time']);
 
-        // Check for and display results
-        if (isset($result_array)) {
-                foreach ($result_array as $result) {
-                // Output strings and highlight the matches
-		 $d_keyword = htmlspecialchars($result['entry_keyword']);
-                 $d_category = htmlspecialchars($result['entry_category']);
-                 $d_subcat = htmlspecialchars($result['entry_subcategory']);
-                 $d_assigngroup = htmlspecialchars($result['assign_group']);
-                 $d_notes = htmlspecialchars($result['notes']);
-                 $d_priconsult = htmlspecialchars($result['pri_consult']);
-                 $d_bakconsult = htmlspecialchars($result['bak_consult']);
-                 $d_manager = htmlspecialchars($result['manager']);
-		 $d_smittime = htmlspecialchars($result['smit_time']);
-		 $d_updttime = htmlspecialchars($result['updt_time']);
-                 $d_id = htmlspecialchars($result['id']);                
-		// Replace the items into above HTML
-                $o = str_replace('keywordString', $d_keyword, $html);
-                $o = str_replace('categoryString', $d_category, $o);
-                $o = str_replace('subcatString', $d_subcat, $o);
-                $o = str_replace('assigngroupString', $d_assigngroup, $o);
-                $o = str_replace('notesString', $d_notes, $o);
-                $o = str_replace('priconsultString', $d_priconsult, $o);
-                $o = str_replace('bakconsultString', $d_bakconsult, $o);
-                $o = str_replace('managerString', $d_manager, $o);
-		$o = str_replace('smittimeString', $d_smittime, $o);
-		$o = str_replace('updttimeString', $d_updttime, $o);
-                $o = str_replace('idString', $d_id, $o);                
-		// Output it
-                echo($o);
-                        }
-                }else{
-                // Replace for no results
-                $o = str_replace('keywordString', '<span class="label label-danger">Error: Entry ID Not Found</span>', $html);
-                $o = str_replace('categoryString', '', $o);
-                $o = str_replace('subcatString', '', $o);
-                $o = str_replace('assigngroupString', '', $o);
-                $o = str_replace('notesString', '', $o);
-                $o = str_replace('priconsultString', '', $o);
-		$o = str_replace('bakconsultString', '', $o);
-		$o = str_replace('managerString', '', $o);
-		$o = str_replace('smittimeString', '', $o);
-                $o = str_replace('updttimeString', '', $o);
-		$o = str_replace('idString', '', $o);
-                // Output
-                echo($o);
-        }
-//}
+	// Build category string
+	$category_string = $d_category;
+	if ($d_subcat) {
+		$category_string .= ' / ' . $d_subcat;
+	}
+
+	// Output the modernized HTML structure
+	echo '
+	<div class="entry-wrapper">
+		<div class="entry-header">
+			<h1 class="entry-keyword">' . $d_keyword . '</h1>
+			<p class="entry-category">' . $category_string . '</p>
+		</div>
+		<div class="entry-body">
+			<div class="assignment-group-section">
+				<div class="label">ASSIGNMENT GROUP</div>
+				<div class="group-name">' . $d_assigngroup . '</div>
+			</div>
+			<div class="notes-section">
+				<div class="label">Additional Notes</div>
+				<pre>' . ($d_notes ? $d_notes : "No additional notes provided.") . '</pre>
+			</div>
+		</div>
+		<div class="entry-footer">
+			<div class="entry-meta">
+				Created: ' . $d_smittime . ' | Last Modified: ' . $d_updttime . '
+			</div>
+			<a href="modifycontent.php?id=' . $entryID . '" class="btn-modify-entry">
+				<i class="fa fa-pencil"></i> Modify This Entry
+			</a>
+		</div>
+	</div>';
+
+} else {
+	// Error message if no entry is found
+	echo '
+	<div class="alert alert-danger">
+		<h4><i class="fa fa-exclamation-triangle"></i> Error: Entry Not Found</h4>
+		<p>The requested entry ID could not be found in the database. Please check the ID and try again.</p>
+		<a href="index.html" class="btn btn-danger" style="margin-top:10px;">Return to Search</a>
+	</div>';
+}
 ?>
-
-				</section>
-				<! --/wrapper -->
-			</section><!-- /MAIN CONTENT -->
-
-			<!--main content end-->
-
+				</div>
+			</div>
 		</section>
+	</section>
+</section>
 
-		<!-- place JS scripts at end of page for faster load times -->
-		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-		<script src="assets/js/bootstrap.min.js"></script>
-		<script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
+<!-- place JS scripts at end of page for faster load times -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>
+<script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
 
-		<!--script for this page-->
-		<script type="text/javascript" src="scripts/triggers.js"></script>
-		<script type="text/javascript" src="scripts/votesystem.js"></script>
+<!--script for this page-->
+<script type="text/javascript" src="scripts/triggers.js"></script>
+<script type="text/javascript" src="scripts/votesystem.js"></script>
 
-	</body>
+</body>
 </html>

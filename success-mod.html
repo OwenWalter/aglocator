@@ -18,192 +18,86 @@
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 	<link href="assets/css/style.css" rel="stylesheet">
 	<link href="assets/css/style-responsive.css" rel="stylesheet">
-	<link href="assets/css/table-responsive.css" rel="stylesheet">
 	<link href="assets/css/custom.css" rel="stylesheet">
 	
-	<!-- Modern styling to match index.html -->
 	<style>
-		/* SAS Blue Color Palette */
 		:root {
 			--sas-blue: #0074D9;
 			--sas-blue-dark: #005bb5;
-			--sas-blue-light: #4da3e0;
 			--sas-gray-light: #f8f9fa;
 			--sas-gray: #6c757d;
 			--sas-border: #e9ecef;
 		}
-
-		/* Overall page styling */
 		body {
 			font-family: 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 			background-color: var(--sas-gray-light);
 			color: #333;
 		}
-
-		/* Enhanced modern header styling */
 		.navbar-default {
 			background: linear-gradient(135deg, var(--sas-blue) 0%, var(--sas-blue-dark) 100%);
 			border: none;
 			box-shadow: 0 4px 20px rgba(0,116,217,0.2);
 			margin-bottom: 0;
 			padding: 8px 0;
-			position: relative;
-			overflow: hidden;
 		}
-
-		.navbar-default::before {
-			content: '';
-			position: absolute;
-			top: -50%;
-			right: -10%;
-			width: 100px;
-			height: 200%;
-			background: rgba(255,255,255,0.05);
-			transform: rotate(15deg);
-		}
-
-		.navbar-default::after {
-			content: '';
-			position: absolute;
-			top: -50%;
-			right: -5%;
-			width: 60px;
-			height: 200%;
-			background: rgba(255,255,255,0.03);
-			transform: rotate(15deg);
-		}
-
-		.navbar-brand {
-			padding: 10px 20px;
-			transition: all 0.3s ease;
-			position: relative;
-			z-index: 10;
-		}
-
 		.navbar-brand img {
 			height: 60px;
-			width: auto;
-			max-width: 400px;
-			transition: all 0.3s ease;
 			transform: translateY(-15px);
 		}
-
 		.navbar-nav > li > a {
 			color: rgba(255,255,255,0.9) !important;
 			font-weight: 500;
 			font-size: 16px;
-			padding: 15px 20px !important;
-			transition: all 0.3s ease;
-			position: relative;
-			z-index: 10;
 		}
-
-		.navbar-nav > li > a:hover,
-		.navbar-nav > li > a:focus {
-			color: white !important;
-			background: rgba(255,255,255,0.15) !important;
-			border-radius: 6px;
-		}
-
-		.navbar-nav > .active > a {
-			background: rgba(255,255,255,0.2) !important;
-			border-radius: 6px;
-		}
-
-		/* Main content area */
-		#container {
-			background: white;
-			min-height: 100vh;
-		}
-
 		#main-content {
 			padding: 40px 20px;
 		}
-
-		/* Success message styling - purple for modification */
-		.success-message {
-			background: linear-gradient(135deg, #6f42c1 0%, #9b59b6 100%);
-			color: white;
-			padding: 30px;
+		.simple-panel {
+			background: white;
+			padding: 40px 30px;
 			border-radius: 12px;
-			box-shadow: 0 8px 32px rgba(111, 66, 193, 0.2);
-			margin-bottom: 30px;
+			box-shadow: 0 6px 24px rgba(0,0,0,0.07);
+			border: 1px solid var(--sas-border);
 			text-align: center;
 		}
-
-		.success-message h2 {
+		.simple-panel .icon {
+			font-size: 48px;
+			color: #28a745; /* Success Green */
+			margin-bottom: 20px;
+		}
+		.simple-panel h2 {
 			margin: 0 0 15px 0;
 			font-size: 24px;
 			font-weight: 600;
+			color: #333;
 		}
-
-		.success-message p {
-			margin: 0;
+		.simple-panel p {
+			margin: 0 0 30px 0;
 			font-size: 16px;
-			opacity: 0.9;
+			color: var(--sas-gray);
 		}
-
-		/* Navigation buttons styling */
-		.nav-buttons {
-			text-align: center;
-		}
-
-		.nav-buttons .btn {
+		.simple-panel .btn-primary {
 			background: var(--sas-blue);
 			color: white;
 			border: none;
-			padding: 12px 24px;
+			padding: 12px 30px;
 			border-radius: 8px;
 			font-weight: 500;
 			text-decoration: none;
-			display: inline-block;
-			margin: 0 10px 10px 10px;
 			transition: all 0.3s ease;
-			box-shadow: 0 4px 12px rgba(0,116,217,0.2);
 		}
-
-		.nav-buttons .btn:hover {
+		.simple-panel .btn-primary:hover {
 			background: var(--sas-blue-dark);
 			transform: translateY(-2px);
-			box-shadow: 0 6px 20px rgba(0,116,217,0.3);
-			text-decoration: none;
-			color: white;
-		}
-
-		/* Mobile responsive */
-		@media (max-width: 768px) {
-			.navbar-brand img {
-				height: 40px;
-				max-width: 250px;
-			}
-
-			#main-content {
-				padding: 20px 15px;
-			}
-
-			.success-message {
-				padding: 20px;
-			}
-
-			.success-message h2 {
-				font-size: 20px;
-			}
+			box-shadow: 0 4px 12px rgba(0,116,217,0.2);
 		}
 	</style>
-
-	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
-	<!--[if lt IE 9]>
-	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-	<![endif]-->
-
 </head>
 
 <body>
 
 <nav class="navbar navbar-default">
   <div class="container-fluid">
-    <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
         <span class="sr-only">Toggle navigation</span>
@@ -211,12 +105,10 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="index.html">
         <img src="assets/orangeLOGO.png" alt="Assignment Group Locator" />
       </a>
     </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li><a href="index.html">Search</a></li>
@@ -225,39 +117,28 @@
       <ul class="nav navbar-nav navbar-right">
         <li><a href="help.html">Help</a></li>
       </ul>
-    </div><!-- /.navbar-collapse -->
-  </div><!-- /.container-fluid -->
+    </div>
+  </div>
 </nav>
 
 <section id="container">
-	<!--main content start-->
 	<section id="main-content" style="margin-left: 0px;">
 		<section class="wrapper">
 			<div class="row">
-				<div class="col-xs-12 col-sm-8 col-md-6 col-lg-6 col-sm-offset-2 col-md-offset-3 col-lg-offset-3">
-					<div class="success-message">
-						<h2><i class="fa fa-edit"></i> Entry Modified Successfully!</h2>
-						<p>Your entry has been successfully modified.</p>
-					</div>
-					
-					<div class="nav-buttons">
-						<a href="index.html" class="btn">
-							<i class="fa fa-search"></i> Return to Search Page
-						</a>
+				<div class="col-xs-12 col-sm-8 col-md-6 col-sm-offset-2 col-md-offset-3">
+					<div class="simple-panel">
+						<div class="icon">
+							<i class="fa fa-check-circle"></i>
+						</div>
+						<h2>Entry Modified Successfully</h2>
+						<p>The entry has been updated in the database.</p>
+						<a href="index.html" class="btn btn-primary">Return to Search</a>
 					</div>
 				</div>
 			</div>
 		</section>
-	</section><!-- /MAIN CONTENT -->
+	</section>
 </section>
-
-<!-- place JS scripts at end of page for faster load times -->
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-<script src="assets/js/bootstrap.min.js"></script>
-<script class="include" type="text/javascript" src="assets/js/jquery.dcjqaccordion.2.7.js"></script>
-
-<!--script for this page-->
-<script type="text/javascript" src="scripts/triggers.js"></script>
 
 </body>
 </html>
