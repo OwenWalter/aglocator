@@ -429,15 +429,12 @@
 											<button type="button" class="btn btn-filter dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterBtn" title="Filter results">
 												<span class="glyphicon glyphicon-filter"></span> Filter <span class="caret"></span>
 											</button>
-											<ul class="dropdown-menu dropdown-menu-right" id="categoryFilter">
-												<li class="dropdown-header">Support Category</li>
-												<li><a href="#" data-category="">All Categories</a></li>
-												<li role="separator" class="divider"></li>
+											<ul class="dropdown-menu" id="categoryFilter">
+												<li class="dropdown-header">Filter by Category</li>
 												<li><a href="#" data-category="Installation">Installation</a></li>
 												<li><a href="#" data-category="Configuration">Configuration</a></li>
 												<li><a href="#" data-category="Performance">Performance</a></li>
-												<li><a href="#" data-category="Documentation">Documentation</a></li>
-												<li><a href="#" data-category="Security">Security</a></li>
+												<li><a href="#" data-category="Usage">Usage</a></li>
 											</ul>
 										</div>
 									</div>
@@ -508,11 +505,36 @@
 			
 			$(document).ready(function() {
 				console.log('jQuery is working');
-				console.log('Filter button exists:', $('#filterBtn').length);
-				console.log('Category filter dropdown exists:', $('#categoryFilter').length);
 				
-				// Hide search results initially
-				$(".tablesearch").hide();
+				// Part 1: Check for a search term in the URL path. If found, store it and redirect.
+				var path = window.location.pathname;
+				var searchMarker = '/index.html/';
+				var markerIndex = path.indexOf(searchMarker);
+
+				if (markerIndex !== -1) {
+					var searchTermFromUrl = path.substring(markerIndex + searchMarker.length);
+					if (searchTermFromUrl) {
+						var decodedTerm = decodeURIComponent(searchTermFromUrl.replace(/-/g, ' '));
+						// Store the term and redirect to the clean URL.
+						sessionStorage.setItem('urlSearchTerm', decodedTerm);
+						window.location.href = '/ag-locator-main/index.html';
+						return; // Stop script execution for the current page load.
+					}
+				}
+
+				// Part 2: On page load, check if a term was stored from a redirect.
+				var storedSearchTerm = sessionStorage.getItem('urlSearchTerm');
+				if (storedSearchTerm) {
+					$('input#name').val(storedSearchTerm);
+					$(".tablesearch").fadeIn(300);
+					search(); // Call the existing search function.
+					
+					// Clean up the stored term so it doesn't run on a normal refresh.
+					sessionStorage.removeItem('urlSearchTerm');
+				} else {
+					// Hide search results initially only if not performing a stored search.
+					$(".tablesearch").hide();
+				}
 				
 				// Search function with filter support
 				function search() {
